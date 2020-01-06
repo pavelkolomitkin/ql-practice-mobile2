@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 
-import {View} from 'react-native';
-
-// import styles from './styles';
+import {View, Text} from 'react-native';
+// import Layout from '../../components/common/layout';
 
 export default class SignIn extends Component {
     render() {
         return (
-            <View/>
+            <View>
+                <Text>Sign Up Screen</Text>
+            </View>
         );
     }
 }

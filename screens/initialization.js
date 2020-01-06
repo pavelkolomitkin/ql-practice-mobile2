@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
 import {View, ActivityIndicator, Text} from 'react-native';
+// import { Navigation } from 'react-native-navigation';
+// import screenTitles from './titles';
+import * as Navigation from '../navigation/index';
 
 
 export default class Initialization extends Component {
@@ -11,14 +14,16 @@ export default class Initialization extends Component {
 
     componentDidMount(): void {
 
-        // setTimeout(() => {
-        //
-        //     this.setState({
-        //         isLoaded: true
-        //     });
-        //
-        //     this.props.navigation.navigate('Security');
-        // }, 5000);
+        setTimeout( async () => {
+
+            this.setState({
+                isLoaded: true
+            });
+
+            await Navigation.setSecurityView();
+
+            //this.props.navigation.navigate('Security');
+        }, 2000);
     }
 
     render() {
