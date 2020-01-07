@@ -23,7 +23,7 @@ export default class Initialization extends Component {
             await Navigation.setSecurityView();
 
             //this.props.navigation.navigate('Security');
-        }, 2000);
+        }, 1);
     }
 
     render() {

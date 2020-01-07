@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigation } from 'react-native-navigation';
 
 import titles from '../screens/titles';
-
+import theme from '../theme/index';
 import Initialization from '../screens/initialization';
 import SignUp from '../screens/security/sign-up';
 import SignIn from '../screens/security/sign-in';
@@ -14,7 +14,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const setSecurityView = async () => {
 
-    const icon = await Icon.getImageSource('rocket', 30, '#0000ff');
+
+    const signInIcon = await Icon.getImageSource('sign-in', 30, theme.colors.icon.defaultColor);
+    const signInUpIcon = await Icon.getImageSource('user-plus', 30, theme.colors.icon.defaultColor);
+    const restorePasswordIcon = await Icon.getImageSource('unlock', 30, theme.colors.icon.defaultColor);
+    const facebookIcon = await Icon.getImageSource('facebook', 30, theme.colors.icon.defaultColor);
 
      await Navigation.setRoot({
          root: {
@@ -26,7 +30,7 @@ export const setSecurityView = async () => {
                              options: {
                                  bottomTab: {
                                      text: 'SignIn',
-                                     icon: icon
+                                     icon: signInIcon
                                  },
                              }
                          },
@@ -38,7 +42,7 @@ export const setSecurityView = async () => {
                              options: {
                                  bottomTab: {
                                      text: 'SignUp',
-                                     icon: icon
+                                     icon: signInUpIcon
                                  },
                              }
                          },
@@ -49,7 +53,7 @@ export const setSecurityView = async () => {
                              options: {
                                  bottomTab: {
                                      text: 'Restore',
-                                     icon: icon
+                                     icon: restorePasswordIcon
                                  },
                              }
                          }
@@ -60,7 +64,7 @@ export const setSecurityView = async () => {
                              options: {
                                  bottomTab: {
                                      text: 'FB',
-                                     icon: icon
+                                     icon: facebookIcon
                                  },
                              }
                          },

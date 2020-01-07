@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-
-import { ThemeProvider } from 'react-native-elements';
+import { View } from 'react-native';
 
 export default ({children}) => {
     return (
-        <ThemeProvider>
+        <View>
             { children }
-        </ThemeProvider>
+        </View>
     )
 }
