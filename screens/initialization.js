@@ -1,29 +1,48 @@
 import React, {Component} from 'react';
 
 import {View, ActivityIndicator, Text} from 'react-native';
-// import { Navigation } from 'react-native-navigation';
-// import screenTitles from './titles';
 import * as Navigation from '../navigation/index';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as securityActions from '../redux/actions/security';
+import * as languageActions from '../redux/actions/language';
 
 
-export default class Initialization extends Component {
+class Initialization extends Component {
 
     state = {
         isLoaded: false
     };
 
-    componentDidMount(): void {
+    async componentDidMount(): void {
 
-        setTimeout( async () => {
+        // if there is the security token
+            // try to initialize the user
+        const userLoading = this
+            .props
+            .securityActions
+            .getUserInfo();
 
-            this.setState({
-                isLoaded: true
-            });
+        // if there is no data under "languages" key
+            // try to load language from the server
 
+        const languageLoading = this
+            .props
+            .languageActions
+            .loadLanguages();
+
+        await languageLoading;
+        const user = await userLoading;
+
+        if (!user)
+        {
             await Navigation.setSecurityView();
-
-        }, 1);
+        }
+        else
+        {
+            // show the authorized user navigation
+        }
     }
 
     render() {
@@ -41,13 +60,6 @@ export default class Initialization extends Component {
                     />
                 }
             </Container>
-
-            // <View>
-            //     <Text>Hello</Text>
-            //     { !isLoaded &&
-            //         <ActivityIndicator size="large" color="#0000ff" />
-            //     }
-            // </View>
         );
     }
 }
@@ -67,3 +79,17 @@ const Header = styled.Text`
   color: #fff;
   margin-bottom: 15px;
 `;
+
+const mapStateToProps = (state) => {
+    return {
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        securityActions: bindActionCreators(securityActions, dispatch),
+        languageActions: bindActionCreators(languageActions, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Initialization);

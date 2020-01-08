@@ -22,6 +22,28 @@ export function login(email, password) {
     }
 }
 
+export function getUserInfo() {
+    return (dispatch) => {
+
+        const service = new SecurityService();
+
+        return service
+            .getUserInfo()
+            .then(async (user) => {
+                if (user === null)
+                {
+                    dispatch(userInitializedError());
+                }
+                else
+                {
+                    dispatch(userInitializedSuccess(user));
+                }
+
+                return user;
+            });
+    };
+}
+
 export function logout() {
     return (dispatch) => {
 
@@ -47,4 +69,17 @@ const userLogout = () => {
     return {
         type: types.SECURITY_USER_LOGOUT
     }
+};
+
+const userInitializedSuccess = (user) => {
+    return {
+        type: types.SECURITY_USER_INITIALIZED_SUCCESS,
+        user
+    };
+};
+
+const userInitializedError = () => {
+    return {
+        type: types.SECURITY_USER_INITIALIZED_ERROR
+    };
 };

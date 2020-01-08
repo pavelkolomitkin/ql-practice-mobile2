@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 
 export const initialState = {
     token: null,
+    user: null,
     loginErrors: {}
 };
 
@@ -30,6 +31,20 @@ export const reducer = (state = {}, action) => {
             return {
                 ...state,
                 ...initialState
+            };
+
+        case types.SECURITY_USER_INITIALIZED_SUCCESS:
+
+            return {
+                ...state,
+                user: action.user
+            };
+
+        case types.SECURITY_USER_INITIALIZED_ERROR:
+
+            return {
+                token: null,
+                user: null
             };
 
         default:
