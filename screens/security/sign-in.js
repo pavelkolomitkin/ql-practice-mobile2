@@ -1,66 +1,137 @@
 import React, {Component} from 'react';
 
 import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
-import Layout from '../../components/common/layout';
+import Layout from './layout';
 import theme from '../../theme/index';
 import {
-    Container,
-    Header,
-    Content,
-    Title,
-    Body,
     Item,
     Input,
     Button,
     Text,
-    Row,
-    Col,
-    Form,
-    Label,
-    Subtitle,
-    Left
+    Spinner,
+    Toast
 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../redux/actions/security';
+import { Navigation } from 'react-native-navigation';
 
-export default class SignIn extends Component {
+class SignIn extends Component {
+
+    state = {
+        email: '',
+        password: '',
+        isLoading: false
+    };
+
+    constructor(props) {
+        super(props);
+
+        Navigation.events().bindComponent(this);
+    }
+
+
+    componentDidAppear() {
+        //this.setState({ text: 'componentDidAppear' });
+        //console.log('Login Screen appeared');
+    }
+
+    componentDidDisappear() {
+        //alert('componentDidDisappear');
+        //console.log('Login Screen disappeared');
+    }
+
+
+    onSubmit = async () => {
+        this.setState({
+            isLoading: true
+        });
+
+        const { email, password } = this.state;
+
+        await this.props.actions.login(email, password)
+            .then((data) => {
+                // console.log('LOGIN SUCCESS', data);
+                alert('USER LOGGED IN');
+                // switch to the authorized user navigation
+            })
+            .catch((errors) => {
+                console.log('LOGIN ERROR', errors);
+                Toast.show({
+                    text: 'Wrong email or password',
+                    duration: 1500,
+                })
+            });
+
+
+        this.setState({
+            isLoading: false
+        });
+    };
+
+    onFieldChange = (name, value) => {
+        this.setState({
+            [name]: value
+        });
+    };
+
 
     render() {
+
+        const { email, password, isLoading } = this.state;
+
         return (
-                <Container>
-                    <Header>
-                        <Body>
-                            <Title>Sign In</Title>
-                        </Body>
-                    </Header>
-                    <Content style={{ padding: 10 }} contentContainerStyle={{ flex: 1 }}>
+            <Layout title="Sign In">
+                <KeyboardAvoidingView >
 
-                        <KeyboardAvoidingView >
+                    <Item style={{ paddingBottom: 10 }}>
 
-                            <Item style={{ paddingBottom: 10 }}>
+                        <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
+                        <Input placeholder='Your Email' value={email} onChange={
+                            (value) => this.onFieldChange('email', value)
+                        }/>
 
-                                <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                                <Input placeholder='Your Email'/>
+                    </Item>
 
-                            </Item>
+                    <Item last style={{ paddingBottom: 10 }}>
+                        <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
+                        <Input placeholder='Password' secureTextEntry value={password}
+                               onChange={
+                                   (value) => this.onFieldChange('password', value)
+                               }
+                        />
+                    </Item>
 
-                            <Item last style={{ paddingBottom: 10 }}>
-                                <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
-                                <Input placeholder='Password' secureTextEntry/>
-                            </Item>
 
+                    <Button
+                        style={{ justifyContent: 'center' }}
+                        onPress={this.onSubmit}
+                        disabled={isLoading}
+                        active={true}
+                        info
+                    >
+                        { !isLoading ? <Text>Sign In</Text>:
+                            <Spinner color='#fff'/>
+                        }
+                    </Button>
 
-                            <Button style={{ justifyContent: 'center' }}>
-                                <Text>Sign In</Text>
-                            </Button>
-
-                        </KeyboardAvoidingView>
-
-                    </Content>
-                </Container>
+                </KeyboardAvoidingView>
+            </Layout>
         );
     }
 }
 
-const styles = StyleSheet.create({
+const mapStateToProps = (state) => {
+    return {
+        errors: state.security.loginErrors
+    };
+};
 
-});
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators(actions, dispatch)
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

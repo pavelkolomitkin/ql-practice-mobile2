@@ -10,10 +10,14 @@ import RestorePassword from '../screens/security/restore-password';
 import FacebookAuth from '../screens/security/facebook-auth';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
 
+export const setAuthorizedUserView = async () => {
+
+};
 
 export const setSecurityView = async () => {
-
 
     const signInIcon = await Icon.getImageSource('sign-in', 30, theme.colors.icon.defaultColor);
     const signInUpIcon = await Icon.getImageSource('user-plus', 30, theme.colors.icon.defaultColor);
@@ -80,11 +84,12 @@ export const setSecurityView = async () => {
 
 export const start = () => {
 
-    Navigation.registerComponent(titles.initialization, () => Initialization);
-    Navigation.registerComponent(titles.securitySignUp, () => SignUp);
-    Navigation.registerComponent(titles.securitySignIn, () => SignIn);
-    Navigation.registerComponent(titles.securityRestorePassword, () => RestorePassword);
-    Navigation.registerComponent(titles.securityFacebookAuth, () => FacebookAuth);
+
+    Navigation.registerComponentWithRedux(titles.initialization, () => Initialization, Provider, store);
+    Navigation.registerComponentWithRedux(titles.securitySignUp, () => SignUp, Provider, store);
+    Navigation.registerComponentWithRedux(titles.securitySignIn, () => SignIn, Provider, store);
+    Navigation.registerComponentWithRedux(titles.securityRestorePassword, () => RestorePassword, Provider, store);
+    Navigation.registerComponentWithRedux(titles.securityFacebookAuth, () => FacebookAuth, Provider, store);
 
     Navigation.events().registerAppLaunchedListener(async () => {
 

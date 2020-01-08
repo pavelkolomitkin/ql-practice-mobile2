@@ -4,6 +4,7 @@ import {View, ActivityIndicator, Text} from 'react-native';
 // import { Navigation } from 'react-native-navigation';
 // import screenTitles from './titles';
 import * as Navigation from '../navigation/index';
+import styled from 'styled-components';
 
 
 export default class Initialization extends Component {
@@ -22,7 +23,6 @@ export default class Initialization extends Component {
 
             await Navigation.setSecurityView();
 
-            //this.props.navigation.navigate('Security');
         }, 1);
     }
 
@@ -31,12 +31,39 @@ export default class Initialization extends Component {
         const { isLoaded } = this.state;
 
         return (
-            <View>
-                <Text>Hello</Text>
+
+            <Container>
+                <Header>QL Practice</Header>
                 { !isLoaded &&
-                    <ActivityIndicator size="large" color="#0000ff" />
+                    <ActivityIndicator
+                        size="large"
+                        color="#fff"
+                    />
                 }
-            </View>
+            </Container>
+
+            // <View>
+            //     <Text>Hello</Text>
+            //     { !isLoaded &&
+            //         <ActivityIndicator size="large" color="#0000ff" />
+            //     }
+            // </View>
         );
     }
 }
+
+const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1acfe8;
+`;
+
+const Header = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 32px;
+  color: #fff;
+  margin-bottom: 15px;
+`;
