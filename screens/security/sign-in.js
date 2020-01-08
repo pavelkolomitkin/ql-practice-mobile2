@@ -88,7 +88,7 @@ class SignIn extends Component {
                     <Item style={{ paddingBottom: 10 }}>
 
                         <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                        <Input placeholder='Your Email' value={email} onChange={
+                        <Input placeholder='Your Email' value={email} onChangeText={
                             (value) => this.onFieldChange('email', value)
                         }/>
 
@@ -97,7 +97,7 @@ class SignIn extends Component {
                     <Item last style={{ paddingBottom: 10 }}>
                         <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
                         <Input placeholder='Password' secureTextEntry value={password}
-                               onChange={
+                               onChangeText={
                                    (value) => this.onFieldChange('password', value)
                                }
                         />

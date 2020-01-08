@@ -75,7 +75,7 @@ class SignUp extends Component {
 
                         <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
                         <Input placeholder='Your Email' value={email}
-                               onChange={
+                               onChangeText={
                                    (value) => this.onFieldChangeHandler('email', value)
                                }
                         />
@@ -85,7 +85,7 @@ class SignUp extends Component {
                     <Item style={{ paddingBottom: 10 }}>
                         <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
                         <Input placeholder='Password' secureTextEntry value={password}
-                               onChange={
+                               onChangeText={
                                    (value) => this.onFieldChangeHandler('password', value)
                                }
                         />
@@ -94,7 +94,7 @@ class SignUp extends Component {
                     <Item style={{ paddingBottom: 10 }}>
                         <Icon active name='user' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
                         <Input placeholder='Your Name' value={name}
-                               onChange={
+                               onChangeText={
                                    (value) => this.onFieldChangeHandler('name', value)
                                }
                         />
@@ -109,6 +109,7 @@ class SignUp extends Component {
                         <Picker
 
                             mode="dialog"
+                            prompt="Your Native Language"
                             placeholder="Your Native Language"
                             selectedValue={nativeLanguage}
                             onValueChange={(value) => this.onFieldChangeHandler('nativeLanguage', value)}
@@ -128,6 +129,7 @@ class SignUp extends Component {
                         <Picker
                             mode="dialog"
                             placeHolder="Language you practice"
+                            prompt="Language you practice"
                             selectedValue={practiceLanguage}
                             onValueChange={(value) => this.onFieldChangeHandler('practiceLanguage', value)}
                         >
@@ -144,6 +146,7 @@ class SignUp extends Component {
                     <Item style={{ paddingBottom: 10 }}>
                         <Picker
                             mode="dialog"
+                            prompt="Your practice language level"
                             placeHolder="Your practice language level"
                             selectedValue={practiceLanguageLevel}
                             onValueChange={(value) => this.onFieldChangeHandler('practiceLanguageLevel', value)}
@@ -157,9 +160,13 @@ class SignUp extends Component {
 
 
                     <ListItem style={{ paddingTop: 20, paddingBottom: 20, marginLeft: 0 }}  onPress={
-                        () => this.onFieldChangeHandler('isAgreementAccepted', !isAgreementAccepted)
+                        (event) =>
+                        {
+                            this.onFieldChangeHandler('isAgreementAccepted', !isAgreementAccepted);
+                            event.preventDefault();
+                        }
                     }>
-                        <CheckBox checked={isAgreementAccepted} />
+                        <CheckBox checked={isAgreementAccepted} disabled={true} />
                         <Body>
                             <Text style={{ textAlign: 'left' }}>Accept the agreement</Text>
                         </Body>
