@@ -39,7 +39,7 @@ class SignUp extends Component {
 
 
     onFieldChangeHandler = (name, value) => {
-        console.log(name, value);
+        //console.log(name, value);
         this.setState({
             [name]: value
         })
