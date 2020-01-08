@@ -29,4 +29,35 @@ export default class LanguageService {
         });
     }
 
+    getLevels()
+    {
+        return new Promise((resolve, reject) => {
+
+            resolve([
+                {
+                    id: 1,
+                    title: 'Beginner'
+                },
+
+                {
+                    id: 2,
+                    title: 'Elementary'
+                },
+                {
+                    id: 3,
+                    title: 'Intermediate'
+                },
+                {
+                    id: 4,
+                    title: 'Advanced'
+                },
+                {
+                    id: 5,
+                    title: 'Native'
+                }
+            ]);
+
+        });
+    }
+
 }

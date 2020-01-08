@@ -1,7 +1,8 @@
 import * as types from '../actions/types';
 
 export const initialState = {
-    languages: []
+    languages: [],
+    levels: []
 };
 
 export const reducer = (state = {}, action) => {
@@ -13,6 +14,14 @@ export const reducer = (state = {}, action) => {
             return {
                 ...state,
                 languages: action.list
+            };
+
+
+        case types.LANGUAGE_LEVEL_LOAD_ALL_SUCCESS:
+
+            return {
+                ...state,
+                levels: action.list
             };
 
         default:

@@ -27,12 +27,18 @@ class Initialization extends Component {
         // if there is no data under "languages" key
             // try to load language from the server
 
-        const languageLoading = this
+        const languagesLoading = this
             .props
             .languageActions
             .loadLanguages();
 
-        await languageLoading;
+        const languageLevelsLoading = this
+            .props
+            .languageActions
+            .loadLanguageLevels();
+
+        await languagesLoading;
+        await languageLevelsLoading;
         const user = await userLoading;
 
         if (!user)

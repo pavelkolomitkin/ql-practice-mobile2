@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
-import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
+import {View, KeyboardAvoidingView, TouchableOpacity, ScrollView} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import styled from 'styled-components';
 import Layout from './layout';
 import {
     Item,
@@ -12,12 +14,16 @@ import {
     Body,
     Picker,
     CheckBox,
-    ListItem
+    ListItem,
+    Label
 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from '../../theme';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../redux/actions/security';
 
-export default class SignUp extends Component {
+class SignUp extends Component {
 
     state = {
         email: '',
@@ -25,6 +31,7 @@ export default class SignUp extends Component {
         name: '',
         nativeLanguage: null,
         practiceLanguage: null,
+        practiceLanguageLevel: null,
         isAgreementAccepted: false,
 
         isLoading: false
@@ -54,18 +61,20 @@ export default class SignUp extends Component {
             name,
             nativeLanguage,
             practiceLanguage,
+            practiceLanguageLevel,
             isAgreementAccepted,
-
             isLoading
         } = this.state;
 
+        const { languages, languageLevels } = this.props;
+
         return (
             <Layout title="Sign Up">
-                <KeyboardAvoidingView>
+                <KeyboardAwareScrollView>
                     <Item style={{ paddingBottom: 10 }}>
 
                         <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                        <Input placeholder='Your Email'
+                        <Input placeholder='Your Email' value={email}
                                onChange={
                                    (value) => this.onFieldChangeHandler('email', value)
                                }
@@ -75,7 +84,7 @@ export default class SignUp extends Component {
 
                     <Item style={{ paddingBottom: 10 }}>
                         <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
-                        <Input placeholder='Password' secureTextEntry
+                        <Input placeholder='Password' secureTextEntry value={password}
                                onChange={
                                    (value) => this.onFieldChangeHandler('password', value)
                                }
@@ -84,29 +93,65 @@ export default class SignUp extends Component {
 
                     <Item style={{ paddingBottom: 10 }}>
                         <Icon active name='user' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
-                        <Input placeholder='Your Name'
+                        <Input placeholder='Your Name' value={name}
                                onChange={
                                    (value) => this.onFieldChangeHandler('name', value)
                                }
                         />
                     </Item>
 
+                    <View style={{ paddingTop: 10 }}>
+                        <FieldLabel>Your Native Language</FieldLabel>
+                    </View>
+
                     <Item style={{ paddingBottom: 10 }}>
+
                         <Picker
-                            mode="dropdown"
-                            placeHolder="Your Native Language"
+
+                            mode="dialog"
+                            placeholder="Your Native Language"
                             selectedValue={nativeLanguage}
                             onValueChange={(value) => this.onFieldChangeHandler('nativeLanguage', value)}
-                        />
+                        >
+                            { languages.map((language) => {
+                               return (<Picker.Item key={language.id} label={language.title} value={language} />);
+                            }) }
+
+                        </Picker>
                     </Item>
+
+                    <View style={{ paddingTop: 10 }}>
+                        <FieldLabel>Language you practice</FieldLabel>
+                    </View>
 
                     <Item style={{ paddingBottom: 10 }}>
                         <Picker
-                            mode="dropdown"
+                            mode="dialog"
                             placeHolder="Language you practice"
                             selectedValue={practiceLanguage}
                             onValueChange={(value) => this.onFieldChangeHandler('practiceLanguage', value)}
-                        />
+                        >
+                            { languages.map((language) => {
+                                return (<Picker.Item key={language.id} label={language.title} value={language} />);
+                            }) }
+                        </Picker>
+                    </Item>
+
+                    <View style={{ paddingTop: 10 }}>
+                        <FieldLabel>Your practice language level</FieldLabel>
+                    </View>
+
+                    <Item style={{ paddingBottom: 10 }}>
+                        <Picker
+                            mode="dialog"
+                            placeHolder="Your practice language level"
+                            selectedValue={practiceLanguageLevel}
+                            onValueChange={(value) => this.onFieldChangeHandler('practiceLanguageLevel', value)}
+                        >
+                            { languageLevels.map((level) => {
+                                return (<Picker.Item key={level.id} label={level.title} value={level} />);
+                            }) }
+                        </Picker>
                     </Item>
 
 
@@ -135,8 +180,28 @@ export default class SignUp extends Component {
                     </Button>
 
 
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </Layout>
         );
     }
 }
+
+const FieldLabel = styled.Text`
+  font-size: 13px;
+  color: #9c9c9c
+`;
+
+const mapStateToProps = (state) => {
+    return {
+        languages: state.language.languages,
+        languageLevels: state.language.levels
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        //actions: bindActionCreators(actions, dispatch)
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

@@ -1,8 +1,11 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import {AsyncStorage} from 'react-native';
 
 export default class LocalStorage {
 
     static LANGUAGES = 'LANGUAGES';
+
+    static LANGUAGE_LEVELS = 'LANGUAGE_LEVELS';
+
     static SECURITY_TOKEN = 'SECURITY_TOKEN';
 
     static async getItem(name, defaultValue = null)
