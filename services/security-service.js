@@ -3,6 +3,21 @@ import LocalStorage from './local-storage';
 
 export default class SecurityService
 {
+    register(email, fullName, password, passwordRepeat, nativeLanguage, practiceLanguage, practiceLanguageLevel)
+    {
+        const body = {
+            email,
+            fullName,
+            password,
+            passwordRepeat,
+            nativeLanguage: nativeLanguage.id,
+            practiceLanguage: practiceLanguage.id,
+            practiceLanguageLevel: practiceLanguageLevel.id
+        };
+
+        return axios.post('/security/register', body);
+    }
+
     login(email, password)
     {
         return new Promise((resolve, reject) => {

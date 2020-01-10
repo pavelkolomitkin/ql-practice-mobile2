@@ -40,6 +40,7 @@ export const loadLanguages = () => {
 export const loadLanguageLevels = () => {
     return async (dispatch) => {
 
+
         const languageLevelsRaw = await LocalStorage.getItem(LocalStorage.LANGUAGE_LEVELS);
         if (!languageLevelsRaw)
         {

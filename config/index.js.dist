@@ -4,7 +4,7 @@ let config = null;
 if (__DEV__)
 {
     config =  {
-        serverBaseUrl: 'http://192.168.0.131:8080/api'
+        serverBaseUrl: 'http://localhost:8080/api'
     };
 }
 else
