@@ -24,7 +24,7 @@ import theme from '../../theme';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security';
-import {register} from '../../redux/actions/security';
+import {Navigation} from 'react-native-navigation';
 
 class SignUp extends Component {
 
@@ -38,9 +38,23 @@ class SignUp extends Component {
         isAgreementAccepted: false,
 
         errors: {},
+        isAccountCreated: false,
         isLoading: false
     };
 
+    constructor(props) {
+        super(props);
+        Navigation.events().bindComponent(this);
+    }
+
+
+    componentDidAppear() {
+        this.setState({ isAccountCreated: false });
+    }
+
+    componentDidDisappear() {
+        this.setState({ isAccountCreated: false });
+    }
 
     onFieldChangeHandler = (name, value) => {
         //console.log(name, value);
@@ -77,13 +91,18 @@ class SignUp extends Component {
             .then((result) => {
                 // show the success interface
                 console.log('USER REGISTER SUCCESS', result);
+                this.setState({
+                    isAccountCreated: true,
+                    isLoading: false
+                });
             })
             .catch((errors) => {
                 // show validation errors
                 console.log('USER REGISTER ERROR', errors);
 
                 this.setState({
-                    errors
+                    errors,
+                    isLoading: false
                 })
             });
     };
@@ -131,6 +150,15 @@ class SignUp extends Component {
         });
     }
 
+    renderAccountCreated()
+    {
+        return (
+            <Layout title="Account is Created">
+                <Text h2>Check you email to confirm your account!</Text>
+            </Layout>
+        );
+    }
+
     render() {
 
         const {
@@ -142,12 +170,20 @@ class SignUp extends Component {
             practiceLanguageLevel,
             isAgreementAccepted,
             errors,
+            isAccountCreated,
             isLoading
         } = this.state;
+
+        if (isAccountCreated)
+        {
+            return this.renderAccountCreated();
+        }
+
 
         const { languages, languageLevels } = this.props;
 
         return (
+
             <Layout title="Sign Up">
                 <KeyboardAwareScrollView>
                     <Item style={{ paddingBottom: 10 }}>
