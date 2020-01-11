@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import styled from 'styled-components';
 import Layout from './layout';
 import FormFieldError from '../../components/common/form-field-error';
+import AgreementButton from '../../components/security/agreement-button';
 import {
     Item,
     Input,
@@ -49,11 +50,11 @@ class SignUp extends Component {
 
 
     componentDidAppear() {
-        this.setState({ isAccountCreated: false });
+        this.setState({ isAccountCreated: false, isAgreementAccepted: false });
     }
 
     componentDidDisappear() {
-        this.setState({ isAccountCreated: false });
+        this.setState({ isAccountCreated: false, isAgreementAccepted: false });
     }
 
     onFieldChangeHandler = (name, value) => {
@@ -62,6 +63,13 @@ class SignUp extends Component {
             [name]: value
         })
     };
+
+
+    onAgreementAcceptHandler = () => {
+        this.setState({
+            isAgreementAccepted: true
+        });
+    }
 
     onSubmit = async () => {
 
@@ -281,19 +289,7 @@ class SignUp extends Component {
                     </Item>
 
 
-
-                    <ListItem style={{ paddingTop: 20, paddingBottom: 20, marginLeft: 0 }}  onPress={
-                        (event) =>
-                        {
-                            this.onFieldChangeHandler('isAgreementAccepted', !isAgreementAccepted);
-                            event.preventDefault();
-                        }
-                    }>
-                        <CheckBox checked={isAgreementAccepted} disabled={true} />
-                        <Body>
-                            <Text style={{ textAlign: 'left' }}>Accept the agreement</Text>
-                        </Body>
-                    </ListItem>
+                    <AgreementButton onAcceptHandler={this.onAgreementAcceptHandler} />
 
 
 

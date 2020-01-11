@@ -5,6 +5,7 @@ export const initialState = {
     user: null,
     loginErrors: {},
     registerErrors: {},
+    agreement: null
 };
 
 
@@ -51,8 +52,16 @@ export const reducer = (state = {}, action) => {
         case types.SECURITY_USER_INITIALIZED_ERROR:
 
             return {
+                ...state,
                 token: null,
                 user: null
+            };
+
+        case types.SECURITY_AGREEMENT_LOADED:
+
+            return {
+                ...state,
+                agreement: action.text
             };
 
         default:

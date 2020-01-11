@@ -24,6 +24,13 @@ export default class SecurityService
             });
     }
 
+    getAgreement()
+    {
+        return axios
+            .get('/security/agreement')
+            .then(result => result.data.agreement);
+    }
+
     login(email, password)
     {
         return new Promise((resolve, reject) => {

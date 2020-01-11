@@ -46,6 +46,20 @@ export function login(email, password) {
     }
 }
 
+export function getAgreement() {
+    return (dispatch) => {
+
+        return service
+            .getAgreement()
+            .then(result => {
+                dispatch(userAgreementLoaded(result));
+
+                return result;
+            })
+            ;
+    }
+}
+
 export function getUserInfo() {
     return (dispatch) => {
 
@@ -116,5 +130,12 @@ const userInitializedSuccess = (user) => {
 const userInitializedError = () => {
     return {
         type: types.SECURITY_USER_INITIALIZED_ERROR
+    };
+};
+
+const userAgreementLoaded = (text) => {
+    return {
+        type: types.SECURITY_AGREEMENT_LOADED,
+        text
     };
 };
