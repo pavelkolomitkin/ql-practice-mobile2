@@ -2,14 +2,34 @@ import * as types from './types';
 
 import SecurityService from '../../services/security-service';
 
+const service = new SecurityService();
+
 export function register(email, fullName, password, passwordRepeat, nativeLanguage, practiceLanguage, practiceLanguageLevel) {
-    
+    return (dispatch) => {
+
+        return service.register(
+            email,
+            fullName,
+            password,
+            passwordRepeat,
+            nativeLanguage,
+            practiceLanguage,
+            practiceLanguageLevel
+        )
+            .then(() => {
+                dispatch(userRegisterSuccess());
+            })
+            .catch(errors => {
+
+                dispatch(userRegisterError(errors));
+
+                throw errors;
+            });
+    }
 }
 
 export function login(email, password) {
     return (dispatch) => {
-
-        const service = new SecurityService();
 
         return service
             .login(email, password)
@@ -28,8 +48,6 @@ export function login(email, password) {
 
 export function getUserInfo() {
     return (dispatch) => {
-
-        const service = new SecurityService();
 
         return service
             .getUserInfo()
@@ -57,6 +75,19 @@ export function logout() {
         dispatch(userLogout());
     };
 }
+
+const userRegisterSuccess = () => {
+    return {
+        type: types.SECURITY_USER_REGISTER_SUCCESS
+    };
+};
+
+const userRegisterError = (errors) => {
+    return {
+        type: types.SECURITY_USER_REGISTER_ERROR,
+        errors
+    }
+};
 
 const userLoginSuccess = (token) => {
     return {

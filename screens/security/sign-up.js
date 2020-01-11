@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 
+import validator from 'validator/es';
 import {View, KeyboardAvoidingView, TouchableOpacity, ScrollView} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components';
 import Layout from './layout';
+import FormFieldError from '../../components/common/form-field-error';
 import {
     Item,
     Input,
@@ -22,6 +24,7 @@ import theme from '../../theme';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security';
+import {register} from '../../redux/actions/security';
 
 class SignUp extends Component {
 
@@ -34,6 +37,7 @@ class SignUp extends Component {
         practiceLanguageLevel: null,
         isAgreementAccepted: false,
 
+        errors: {},
         isLoading: false
     };
 
@@ -45,13 +49,87 @@ class SignUp extends Component {
         })
     };
 
-    onSubmit = () => {
+    onSubmit = async () => {
 
         this.setState({
+            errors: {},
             isLoading: true,
         });
 
+        const {
+            email,
+            name,
+            password,
+            nativeLanguage,
+            practiceLanguage,
+            practiceLanguageLevel
+        } = this.state;
+
+        await this.props.actions.register(
+            email,
+            name,
+            password,
+            password,
+            nativeLanguage,
+            practiceLanguage,
+            practiceLanguageLevel
+        )
+            .then((result) => {
+                // show the success interface
+                console.log('USER REGISTER SUCCESS', result);
+            })
+            .catch((errors) => {
+                // show validation errors
+                console.log('USER REGISTER ERROR', errors);
+
+                this.setState({
+                    errors
+                })
+            });
     };
+
+    isFormValid()
+    {
+        const { email, password, name, nativeLanguage, practiceLanguage, practiceLanguageLevel, isAgreementAccepted } = this.state;
+
+        if (
+            !validator.isEmail(email) ||
+            validator.isEmpty(password, { ignore_whitespace:true }) ||
+            validator.isEmpty(name, { ignore_whitespace:true }) ||
+            !nativeLanguage ||
+            !practiceLanguage ||
+            !practiceLanguageLevel ||
+            !isAgreementAccepted
+        )
+        {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    getDefaultPracticeLanguage()
+    {
+        const { languages } = this.props;
+
+        return languages.find(item => item.code === 'EN');
+    }
+
+    getDefaultPracticeLanguageLevel()
+    {
+        const { languageLevels } = this.props;
+
+        return languageLevels.find(item => item.code === 'beginner');
+    }
+
+    componentDidMount(): void {
+
+        this.setState({
+            practiceLanguage: this.getDefaultPracticeLanguage(),
+            practiceLanguageLevel: this.getDefaultPracticeLanguageLevel()
+        });
+    }
 
     render() {
 
@@ -63,6 +141,7 @@ class SignUp extends Component {
             practiceLanguage,
             practiceLanguageLevel,
             isAgreementAccepted,
+            errors,
             isLoading
         } = this.state;
 
@@ -79,6 +158,7 @@ class SignUp extends Component {
                                    (value) => this.onFieldChangeHandler('email', value)
                                }
                         />
+                        <FormFieldError name="email" errors={errors} />
 
                     </Item>
 
@@ -89,6 +169,7 @@ class SignUp extends Component {
                                    (value) => this.onFieldChangeHandler('password', value)
                                }
                         />
+                        <FormFieldError name="password" errors={errors} />
                     </Item>
 
                     <Item style={{ paddingBottom: 10 }}>
@@ -98,6 +179,7 @@ class SignUp extends Component {
                                    (value) => this.onFieldChangeHandler('name', value)
                                }
                         />
+                        <FormFieldError name="name" errors={errors} />
                     </Item>
 
                     <View style={{ paddingTop: 10 }}>
@@ -114,11 +196,13 @@ class SignUp extends Component {
                             selectedValue={nativeLanguage}
                             onValueChange={(value) => this.onFieldChangeHandler('nativeLanguage', value)}
                         >
+                            <Picker.Item key={0} label="Select a language" value={null}/>
                             { languages.map((language) => {
                                return (<Picker.Item key={language.id} label={language.title} value={language} />);
                             }) }
 
                         </Picker>
+                        <FormFieldError name="nativeLanguage" errors={errors} />
                     </Item>
 
                     <View style={{ paddingTop: 10 }}>
@@ -137,6 +221,7 @@ class SignUp extends Component {
                                 return (<Picker.Item key={language.id} label={language.title} value={language} />);
                             }) }
                         </Picker>
+                        <FormFieldError name="practiceLanguage" errors={errors} />
                     </Item>
 
                     <View style={{ paddingTop: 10 }}>
@@ -155,6 +240,8 @@ class SignUp extends Component {
                                 return (<Picker.Item key={level.id} label={level.title} value={level} />);
                             }) }
                         </Picker>
+
+                        <FormFieldError name="practiceLanguageLevel" errors={errors} />
                     </Item>
 
 
@@ -177,7 +264,7 @@ class SignUp extends Component {
                     <Button
                         style={{ justifyContent: 'center' }}
                         onPress={this.onSubmit}
-                        disabled={isLoading}
+                        disabled={isLoading || !this.isFormValid()}
                         active={true}
                         info
                     >
@@ -207,7 +294,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        //actions: bindActionCreators(actions, dispatch)
+        actions: bindActionCreators(actions, dispatch)
     };
 };
 

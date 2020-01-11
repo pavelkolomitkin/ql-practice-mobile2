@@ -3,13 +3,21 @@ import * as types from '../actions/types';
 export const initialState = {
     token: null,
     user: null,
-    loginErrors: {}
+    loginErrors: {},
+    registerErrors: {},
 };
 
 
 export const reducer = (state = {}, action) => {
 
     switch (action.type) {
+
+        case types.SECURITY_USER_REGISTER_ERROR:
+
+            return {
+                ...state,
+                registerErrors: action.errors
+            };
 
         case types.SECURITY_USER_LOGIN_SUCCESS:
 

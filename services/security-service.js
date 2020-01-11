@@ -15,7 +15,13 @@ export default class SecurityService
             practiceLanguageLevel: practiceLanguageLevel.id
         };
 
-        return axios.post('/security/register', body);
+        return axios
+            .post('/security/register', body)
+            .catch(errors => {
+                const result = errors.response.data.errors || errors.response.data;
+
+                throw result;
+            });
     }
 
     login(email, password)
