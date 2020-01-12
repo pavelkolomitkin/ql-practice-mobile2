@@ -16,6 +16,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security';
 import { Navigation } from 'react-native-navigation';
+import * as navigation from '../../navigation/index'
+import validator from 'validator/es';
 
 class SignIn extends Component {
 
@@ -50,16 +52,20 @@ class SignIn extends Component {
 
         const { email, password } = this.state;
 
-        await this.props.actions.login(email, password)
-            .then((data) => {
+        await this
+            .props
+            .actions
+            .login(email, password)
+            .then(async (data) => {
                 // console.log('LOGIN SUCCESS', data);
-                alert('USER LOGGED IN');
+                //alert('USER LOGGED IN');
                 // switch to the authorized user navigation
+                await navigation.setClientNavigation();
             })
-            .catch((errors) => {
-                console.log('LOGIN ERROR', errors);
+            .catch(({ message }) => {
+                //console.log('LOGIN ERROR', message);
                 Toast.show({
-                    text: 'Wrong email or password',
+                    text: message,
                     duration: 1500,
                 })
             });
@@ -74,6 +80,12 @@ class SignIn extends Component {
         this.setState({
             [name]: value
         });
+    };
+
+    isFormValid = () => {
+        const { email, password } = this.state;
+
+        return validator.isEmail(email) && (password.trim() !== '');
     };
 
 
@@ -107,7 +119,7 @@ class SignIn extends Component {
                     <Button
                         style={{ justifyContent: 'center' }}
                         onPress={this.onSubmit}
-                        disabled={isLoading}
+                        disabled={isLoading || !this.isFormValid()}
                         active={true}
                         info
                     >

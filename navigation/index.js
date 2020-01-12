@@ -12,9 +12,23 @@ import FacebookAuth from '../screens/security/facebook-auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Provider } from 'react-redux';
 import store from '../redux/store';
+import Profile from '../screens/client/profile';
 
-export const setAuthorizedUserView = async () => {
+export const setClientNavigation = async () => {
 
+    await Navigation.setRoot({
+        root: {
+            stack: {
+                children: [
+                    {
+                        component: {
+                            name: titles.profile
+                        }
+                    }
+                ]
+            }
+        }
+    });
 };
 
 export const setSecurityView = async () => {
@@ -90,6 +104,8 @@ export const start = () => {
     Navigation.registerComponentWithRedux(titles.securitySignIn, () => SignIn, Provider, store);
     Navigation.registerComponentWithRedux(titles.securityRestorePassword, () => RestorePassword, Provider, store);
     Navigation.registerComponentWithRedux(titles.securityFacebookAuth, () => FacebookAuth, Provider, store);
+    Navigation.registerComponentWithRedux(titles.profile, () => Profile, Provider, store);
+
 
     Navigation.events().registerAppLaunchedListener(async () => {
 

@@ -6,4 +6,6 @@ export default {
     securitySignIn: 'app.security.SignIn',
     securityRestorePassword: 'app.security.RestorePassword',
     securityFacebookAuth: 'app.security.FacebookAuth',
+
+    profile: 'app.profile'
 };

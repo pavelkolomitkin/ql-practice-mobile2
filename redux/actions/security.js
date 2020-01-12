@@ -1,6 +1,7 @@
 import * as types from './types';
 
 import SecurityService from '../../services/security-service';
+import LocalStorage from '../../services/local-storage';
 
 const service = new SecurityService();
 
@@ -33,9 +34,12 @@ export function login(email, password) {
 
         return service
             .login(email, password)
-            .then((data) => {
-                dispatch(userLoginSuccess(data.token));
-                return data;
+            .then(async ({ token, user }) => {
+
+                await LocalStorage.setItem(LocalStorage.SECURITY_TOKEN, token);
+
+                dispatch(userLoginSuccess(token, user));
+                return token;
             })
             .catch(errors => {
                 dispatch(userLoginError(errors));
@@ -103,7 +107,7 @@ const userRegisterError = (errors) => {
     }
 };
 
-const userLoginSuccess = (token) => {
+const userLoginSuccess = (token, user) => {
     return {
         type: types.SECURITY_USER_LOGIN_SUCCESS,
         token

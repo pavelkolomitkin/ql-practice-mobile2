@@ -8,7 +8,6 @@ export const initialState = {
     agreement: null
 };
 
-
 export const reducer = (state = {}, action) => {
 
     switch (action.type) {
@@ -25,6 +24,7 @@ export const reducer = (state = {}, action) => {
             return {
                 ...state,
                 token: action.token,
+                user: action.user,
                 loginErrors: {}
             };
 
@@ -32,6 +32,8 @@ export const reducer = (state = {}, action) => {
 
             return {
                 ...state,
+                token: null,
+                user: null,
                 loginErrors: action.errors
             };
 

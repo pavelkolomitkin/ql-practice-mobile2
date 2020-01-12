@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 
 // import styles from './styles';
 
 export default class Profile extends Component {
     render() {
         return (
-            <View/>
+            <View>
+                <Text>Profile Screen</Text>
+            </View>
         );
     }
 }

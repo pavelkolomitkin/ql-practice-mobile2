@@ -18,9 +18,7 @@ export default class SecurityService
         return axios
             .post('/security/register', body)
             .catch(errors => {
-                const result = errors.response.data.errors || errors.response.data;
-
-                throw result;
+                throw errors.response.data.errors || errors.response.data;
             });
     }
 
@@ -33,24 +31,15 @@ export default class SecurityService
 
     login(email, password)
     {
-        return new Promise((resolve, reject) => {
-
-            setTimeout(() => {
-
-
-                resolve({
-                    token: 'secret'
-                });
-
-                // reject({
-                //     login: [
-                //         'Invalid email'
-                //     ],
-                // });
-
-            }, 1000)
-
-        });
+        return axios
+            .post('/security/login', {
+                email,
+                password
+            })
+            .then(result => result.data.token)
+            .catch(errors => {
+                throw errors.response.data.errors || errors.response.data;
+            });
     }
 
     async getUserInfo()
