@@ -36,49 +36,19 @@ export default class SecurityService
                 email,
                 password
             })
-            .then(result => result.data.token)
+            .then(result =>{
+                return {token: result.data.token, user: result.data.user};
+            })
             .catch(errors => {
                 throw errors.response.data.errors || errors.response.data;
             });
     }
 
-    async getUserInfo()
+    getUserInfo()
     {
-        const token = await LocalStorage.getItem(LocalStorage.SECURITY_TOKEN);
-        if (!token)
-        {
-            return null;
-        }
-
-        // TODO In the case when the token is not valid
-            // remove it from the local storage
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-
-                resolve({
-                    id: 1,
-                    name: 'Ivan Petrov',
-                    email: 'ivan.petrov@gmail.com',
-                    nativeLanguages: [
-                        {
-                            id: 2,
-                            title: 'Russian'
-                        }
-                    ],
-                    practiceLanguages: [
-                        {
-                            id: 1,
-                            title: 'English'
-                        },
-                        {
-                            id: 3,
-                            title: 'German'
-                        },
-                    ],
-                    isActive: true
-                })
-
-            }, 100);
-        });
+        return axios
+            .get('/security/profile')
+            .then(result => result.data.user)
+            ;
     }
 }

@@ -27,10 +27,15 @@ class SignIn extends Component {
         isLoading: false
     };
 
+    /**
+     * @type EventSubscription
+     */
+    navigationSubscription = null;
+
     constructor(props) {
         super(props);
 
-        Navigation.events().bindComponent(this);
+        this.navigationSubscription = Navigation.events().bindComponent(this);
     }
 
 
@@ -42,6 +47,10 @@ class SignIn extends Component {
     componentDidDisappear() {
         //alert('componentDidDisappear');
         //console.log('Login Screen disappeared');
+    }
+
+    componentWillUnmount(): void {
+        this.navigationSubscription.remove();
     }
 
 

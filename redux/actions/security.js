@@ -65,13 +65,20 @@ export function getAgreement() {
 }
 
 export function getUserInfo() {
-    return (dispatch) => {
+    return async (dispatch) => {
+
+        const token = await LocalStorage.getItem(LocalStorage.SECURITY_TOKEN);
+        if (!token)
+        {
+            return null;
+        }
 
         return service
             .getUserInfo()
             .then(async (user) => {
                 if (user === null)
                 {
+                    await LocalStorage.removeItem(LocalStorage.SECURITY_TOKEN);
                     dispatch(userInitializedError());
                 }
                 else

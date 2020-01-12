@@ -43,11 +43,15 @@ class SignUp extends Component {
         isLoading: false
     };
 
+    /**
+     * @type EventSubscription
+     */
+    navigationSubscription = null;
+
     constructor(props) {
         super(props);
-        Navigation.events().bindComponent(this);
+        this.navigationSubscription = Navigation.events().bindComponent(this);
     }
-
 
     componentDidAppear() {
         this.setState({ isAccountCreated: false, isAgreementAccepted: false });
@@ -55,6 +59,10 @@ class SignUp extends Component {
 
     componentDidDisappear() {
         this.setState({ isAccountCreated: false, isAgreementAccepted: false });
+    }
+
+    componentWillUnmount(): void {
+        this.navigationSubscription.remove();
     }
 
     onFieldChangeHandler = (name, value) => {
@@ -241,9 +249,11 @@ class SignUp extends Component {
                             onValueChange={(value) => this.onFieldChangeHandler('nativeLanguage', value)}
                         >
                             <Picker.Item key={0} label="Select a language" value={null}/>
-                            { languages.map((language) => {
-                               return (<Picker.Item key={language.id} label={language.title} value={language} />);
-                            }) }
+                            {
+                                !!languages && languages.map((language) => {
+                                    return (<Picker.Item key={language.id} label={language.title} value={language} />);
+                                })
+                            }
 
                         </Picker>
                         <FormFieldError name="nativeLanguage" errors={errors} />
@@ -261,7 +271,7 @@ class SignUp extends Component {
                             selectedValue={practiceLanguage}
                             onValueChange={(value) => this.onFieldChangeHandler('practiceLanguage', value)}
                         >
-                            { languages.map((language) => {
+                            { !!languages && languages.map((language) => {
                                 return (<Picker.Item key={language.id} label={language.title} value={language} />);
                             }) }
                         </Picker>
@@ -280,7 +290,7 @@ class SignUp extends Component {
                             selectedValue={practiceLanguageLevel}
                             onValueChange={(value) => this.onFieldChangeHandler('practiceLanguageLevel', value)}
                         >
-                            { languageLevels.map((level) => {
+                            { !!languageLevels && languageLevels.map((level) => {
                                 return (<Picker.Item key={level.id} label={level.title} value={level} />);
                             }) }
                         </Picker>

@@ -1,3 +1,8 @@
+//======================== SYSTEM ERRORS ==================================
+
+export const SYSTEM_ERROR_INTERNAL_SERVER_ERROR = 'SYSTEM_ERROR_INTERNAL_SERVER_ERROR';
+
+//======================// SYSTEM ERRORS ==================================
 
 //======================== SECURITY =================================
 

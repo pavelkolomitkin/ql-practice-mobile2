@@ -17,15 +17,10 @@ class Initialization extends Component {
 
     async componentDidMount(): void {
 
-        // if there is the security token
-            // try to initialize the user
         const userLoading = this
             .props
             .securityActions
             .getUserInfo();
-
-        // if there is no data under "languages" key
-            // try to load language from the server
 
         const languagesLoading = this
             .props
@@ -47,7 +42,7 @@ class Initialization extends Component {
         }
         else
         {
-            // show the authorized user navigation
+            await Navigation.setClientNavigation();
         }
     }
 
