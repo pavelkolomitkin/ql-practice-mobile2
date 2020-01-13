@@ -29,6 +29,16 @@ export default class SecurityService
             .then(result => result.data.agreement);
     }
 
+    restorePasswordRequest(email)
+    {
+        return axios
+            .post('/security/restore-password-request', { email })
+            .catch(errors => {
+                throw errors.response.data.errors || errors.response.data;
+            })
+            ;
+    }
+
     login(email, password)
     {
         return axios

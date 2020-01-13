@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 
 import Layout from './layout';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from '../../theme';
 import {Button, Input, Item, Spinner, Content} from 'native-base';
@@ -16,8 +15,19 @@ class RestorePassword extends Component {
 
     state = {
         email: '',
-        isLoading: false
+        isLoading: false,
+        isSent: false,
+        resendSecondsLeft: 0,
+        errors: {}
     };
+
+    /**
+     * A number of seconds the user is able to resend the restore request
+     * @returns {number}
+     */
+    getSendRestoreRequestInterval() {
+        return 10;
+    }
 
     onFieldChangeHandler = (name, value) => {
         //console.log(name, value);
@@ -26,19 +36,52 @@ class RestorePassword extends Component {
         });
     };
 
-    onSubmit = () => {
+    onSubmit = async () => {
 
         this.setState({
             isLoading: true,
         });
 
+        const { email } = this.state;
+
+        await this
+            .props
+            .actions
+            .restorePasswordRequest(email)
+            .then(() => {
+
+                this.setState({
+                    isLoading: false,
+                    resendSecondsLeft: this.getSendRestoreRequestInterval()
+                });
+
+                let timer = setInterval(() => {
+
+                    let {resendSecondsLeft} = this.state;
+                    --resendSecondsLeft;
+
+                    this.setState({
+                        resendSecondsLeft
+                    });
+
+                    if (resendSecondsLeft <= 0)
+                    {
+                        clearInterval(timer);
+                    }
+                }, 1000);
+            })
+            .catch((errors) => {
+
+                this.setState({
+                    isLoading: false,
+                    errors
+                });
+            });
     };
-
-
 
     render() {
 
-        const { email, isLoading } = this.state;
+        const { email, isLoading, resendSecondsLeft, isSent } = this.state;
 
         return (
             <Layout title="Restore Password">
@@ -54,19 +97,30 @@ class RestorePassword extends Component {
 
                     </Item>
 
-                    <Button
-                        style={{ justifyContent: 'center'}}
-                        onPress={this.onSubmit}
-                        disabled={isLoading}
-                        active={true}
-                        info
-                    >
-                        { !isLoading ? <Text style={{ color: '#fff', textTransform: 'uppercase'  }}>Restore</Text> :
-                            <Spinner color='#fff'/>
-                        }
-                    </Button>
+                    {
+                        (resendSecondsLeft > 0)
+                            ?
+                            <View>
+                                {
+                                    isSent &&
+                                        <Text success>The restore password link was sent on your email</Text>
+                                }
+                                <Text>You can request after : { resendSecondsLeft } second(s)</Text>
+                            </View>
 
-
+                            :
+                            <Button
+                                style={{ justifyContent: 'center'}}
+                                onPress={this.onSubmit}
+                                disabled={isLoading}
+                                active={true}
+                                info
+                            >
+                                { !isLoading ? <Text style={{ color: '#fff', textTransform: 'uppercase'  }}>Restore</Text> :
+                                    <Spinner color='#fff'/>
+                                }
+                            </Button>
+                    }
                 </Content>
             </Layout>
         );

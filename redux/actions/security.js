@@ -64,6 +64,21 @@ export function getAgreement() {
     }
 }
 
+export function restorePasswordRequest(email) {
+    return (dispatch) => {
+
+        return service
+            .restorePasswordRequest(email)
+            .catch(errors => {
+
+                dispatch(restorePasswordRequestError(errors));
+
+                throw errors;
+            })
+            ;
+    }
+}
+
 export function getUserInfo() {
     return async (dispatch) => {
 
@@ -150,5 +165,12 @@ const userAgreementLoaded = (text) => {
     return {
         type: types.SECURITY_AGREEMENT_LOADED,
         text
+    };
+};
+
+const restorePasswordRequestError = (errors) => {
+    return {
+        type: types.SECURITY_RESTORE_PASSWORD_REQUEST_ERROR,
+        errors
     };
 };
