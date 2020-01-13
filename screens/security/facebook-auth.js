@@ -6,18 +6,30 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security';
 import { Button } from 'native-base';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 class FacebookAuth extends Component {
     render() {
         return (
             <Layout title="FaceBook Login">
-                <View style={{ flex: 1, flexDirection: 'column', alignContent: 'center', justifyContent: 'center' }}>
-                    <Button
-                        style={{ justifyContent: 'center' }}
-                        active
-                        info>
-                        <Text style={{ color: '#fff', textTransform: 'uppercase'  }}>FB Login</Text>
-                    </Button>
+                <View>
+                    <LoginButton
+                        onLoginFinished={
+                            (error, result) => {
+                                if (error) {
+                                    console.log("login has error: " + result.error);
+                                } else if (result.isCancelled) {
+                                    console.log("login is cancelled.");
+                                } else {
+                                    AccessToken.getCurrentAccessToken().then(
+                                        (data) => {
+                                            console.log(data.accessToken.toString())
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        onLogoutFinished={() => console.log("logout.")}/>
                 </View>
             </Layout>
         );
