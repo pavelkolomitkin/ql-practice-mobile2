@@ -9,13 +9,15 @@ export class UnAuthUserInterceptor extends BaseInterceptor
         super.apply(axios);
 
         axios.interceptors.response.use(
-            value => value,
-            error => {
-                        if (error.response.status === UnAuthUserInterceptor.UNAUTHORIZED_STATUS_CODE)
-                        {
-                            securityActions.logout();
+                value => value,
+                error => {
+                            if (error.response.status === UnAuthUserInterceptor.UNAUTHORIZED_STATUS_CODE)
+                            {
+                                securityActions.logout();
+                            }
+
+                            return Promise.reject(error);
                         }
-                    }
             );
     }
 }

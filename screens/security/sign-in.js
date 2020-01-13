@@ -72,17 +72,15 @@ class SignIn extends Component {
                 await navigation.setClientNavigation();
             })
             .catch(({ message }) => {
+                this.setState({
+                    isLoading: false
+                });
                 //console.log('LOGIN ERROR', message);
                 Toast.show({
                     text: message,
                     duration: 1500,
                 })
             });
-
-
-        this.setState({
-            isLoading: false
-        });
     };
 
     onFieldChange = (name, value) => {

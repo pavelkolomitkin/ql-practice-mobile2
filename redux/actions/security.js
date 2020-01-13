@@ -92,9 +92,10 @@ export function getUserInfo() {
 }
 
 export function logout() {
-    return (dispatch) => {
+    return async (dispatch) => {
 
         // Remove the token from the AsyncStorage
+        await LocalStorage.removeItem(LocalStorage.SECURITY_TOKEN);
 
         // dispatch action
         dispatch(userLogout());
@@ -117,7 +118,8 @@ const userRegisterError = (errors) => {
 const userLoginSuccess = (token, user) => {
     return {
         type: types.SECURITY_USER_LOGIN_SUCCESS,
-        token
+        token,
+        user
     }
 };
 
@@ -125,7 +127,7 @@ const userLoginError = (errors) => {
     return { type: types.SECURITY_USER_LOGIN_ERROR, errors }
 };
 
-const userLogout = () => {
+export const userLogout = () => {
     return {
         type: types.SECURITY_USER_LOGOUT
     }

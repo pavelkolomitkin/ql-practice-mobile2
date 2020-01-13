@@ -18,6 +18,8 @@ export default class SystemErrorInterceptor extends BaseInterceptor {
                         })
                     }
 
+                    return Promise.reject(error);
+
                 }
             );
     }

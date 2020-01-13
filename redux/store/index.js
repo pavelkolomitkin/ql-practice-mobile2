@@ -2,6 +2,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from '../reducers/index';
+import { config as configHandlers } from './handlers';
 
 let composeEnhancers = compose;
 if (__DEV__)
@@ -24,5 +25,6 @@ const configureStore = (initialState = {}) => {
 };
 
 const store = configureStore({});
+configHandlers(store);
 
 export default store;

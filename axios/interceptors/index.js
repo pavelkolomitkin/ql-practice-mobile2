@@ -9,7 +9,7 @@ const apply = (axios) => {
         new RequestHeadersInterceptor(),
         new AuthTokenInterceptor(),
         new SystemErrorInterceptor(),
-        new UnAuthUserInterceptor()
+        // new UnAuthUserInterceptor()
     ];
 
     interceptors.forEach(interceptor => interceptor.apply(axios))
