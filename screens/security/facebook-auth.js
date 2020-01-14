@@ -44,29 +44,42 @@ class FacebookAuth extends Component {
             isLoading: true
         });
 
-        LoginManager.logOut();
+        //LoginManager.logOut();
 
         await LoginManager
             .logInWithPermissions(['public_profile'])
             .then((result) => {
 
-                AccessToken.getCurrentAccessToken().then((token) => {
+                const { isCancelled } = result;
 
-                    this
-                        .props
-                        .actions
-                        .login(token)
-                        .then(async () => {
-                            await navigation.setClientNavigation();
-                        })
-                        .catch((errors) => {
-                            debugger
-                            this.setState({
-                                isLoading: false,
-                                errors: 'Cannot authorize using facebook'
+                if (!isCancelled)
+                {
+                    AccessToken.getCurrentAccessToken().then((token) => {
+
+                        this
+                            .props
+                            .actions
+                            .login(token)
+                            .then(async () => {
+                                await navigation.setClientNavigation();
                             })
-                        });
-                });
+                            .catch((errors) => {
+                                this.setState({
+                                    isLoading: false,
+                                    errors: 'Cannot authorize using facebook'
+                                })
+                            });
+                    });
+                }
+                else
+                {
+                    this.setState({
+                        isLoading: false,
+                        errors: null
+                    });
+                }
+
+
 
             })
             .catch((error) => {
