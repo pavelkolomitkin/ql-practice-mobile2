@@ -1,5 +1,5 @@
 import {BaseInterceptor} from './base.interceptor';
-import * as securityActions from '../../redux/actions/security';
+import * as securityActions from '../../redux/actions/security/security';
 
 export class UnAuthUserInterceptor extends BaseInterceptor
 {

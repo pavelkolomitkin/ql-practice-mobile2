@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../../redux/actions/security';
+import * as actions from '../../redux/actions/security/security';
 
 class AgreementButton extends Component {
 

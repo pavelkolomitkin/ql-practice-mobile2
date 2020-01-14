@@ -1,5 +1,4 @@
-import axios from '../axios/index'
-import LocalStorage from './local-storage';
+import axios from '../../axios'
 
 export default class SecurityService
 {

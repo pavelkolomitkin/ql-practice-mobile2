@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../../redux/actions/security';
+import * as actions from '../../redux/actions/security/security';
 
 // import styles from './styles';
 

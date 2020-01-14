@@ -5,7 +5,7 @@ import * as Navigation from '../navigation/index';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as securityActions from '../redux/actions/security';
+import * as securityActions from '../redux/actions/security/security';
 import * as languageActions from '../redux/actions/language';
 
 

@@ -8,7 +8,7 @@ import theme from '../../theme';
 import {Button, Input, Item, Spinner, Content} from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../../redux/actions/security';
+import * as actions from '../../redux/actions/security/security';
 
 
 class RestorePassword extends Component {

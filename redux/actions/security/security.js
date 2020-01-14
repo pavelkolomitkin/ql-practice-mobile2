@@ -1,7 +1,7 @@
-import * as types from './types';
+import * as types from '../types';
 
-import SecurityService from '../../services/security-service';
-import LocalStorage from '../../services/local-storage';
+import SecurityService from '../../../services/security/security-service';
+import LocalStorage from '../../../services/local-storage';
 
 const service = new SecurityService();
 
@@ -130,7 +130,7 @@ const userRegisterError = (errors) => {
     }
 };
 
-const userLoginSuccess = (token, user) => {
+export const userLoginSuccess = (token, user) => {
     return {
         type: types.SECURITY_USER_LOGIN_SUCCESS,
         token,
@@ -138,7 +138,7 @@ const userLoginSuccess = (token, user) => {
     }
 };
 
-const userLoginError = (errors) => {
+export const userLoginError = (errors) => {
     return { type: types.SECURITY_USER_LOGIN_ERROR, errors }
 };
 
