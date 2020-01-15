@@ -1,25 +1,15 @@
 import React, {Component} from 'react';
 
-import {View, StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import Layout from './layout';
-import theme from '../../theme/index';
-import { withTheme, TextInput, HelperText, Button, Snackbar} from 'react-native-paper';
-import styled from 'styled-components';
-// import {
-//     Item,
-//     Input,
-//     Button,
-//     Text,
-//     Spinner,
-//     Toast
-// } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { withTheme, TextInput, Button, Snackbar} from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security/security';
 import { Navigation } from 'react-native-navigation';
 import * as navigation from '../../navigation/index'
 import validator from 'validator/es';
+import FormGroup from '../../components/common/form-group';
 
 class SignIn extends Component {
 
@@ -30,32 +20,9 @@ class SignIn extends Component {
         error: null
     };
 
-    /**
-     * @type EventSubscription
-     */
-    navigationSubscription = null;
-
     constructor(props) {
         super(props);
-
-        this.navigationSubscription = Navigation.events().bindComponent(this);
     }
-
-
-    componentDidAppear() {
-        //this.setState({ text: 'componentDidAppear' });
-        //console.log('Login Screen appeared');
-    }
-
-    componentDidDisappear() {
-        //alert('componentDidDisappear');
-        //console.log('Login Screen disappeared');
-    }
-
-    componentWillUnmount(): void {
-        this.navigationSubscription.remove();
-    }
-
 
     onSubmit = async () => {
         this.setState({
@@ -79,11 +46,6 @@ class SignIn extends Component {
                     isLoading: false,
                     error: message
                 });
-                //console.log('LOGIN ERROR', message);
-                // Toast.show({
-                //     text: message,
-                //     duration: 1500,
-                // })
             });
     };
 
@@ -107,16 +69,14 @@ class SignIn extends Component {
 
         return (
             <Layout>
-                <ScrollView contentContainerStyle={[ styles.container ]}>
+
                     <KeyboardAvoidingView>
 
                         <FormGroup>
                             <TextInput
                                 label="Your Email"
                                 style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
-                                //placeholder="Your Email"
                                 value={email}
-                                // error={!this._isUsernameValid(this.state.nameNoPadding)}
                                 onChangeText={
                                     (value) => this.onFieldChange('email', value)
                                 }
@@ -127,9 +87,7 @@ class SignIn extends Component {
                             <TextInput
                                 label="Password"
                                 style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
-                                //placeholder="Password"
                                 value={password}
-                                // error={!this._isUsernameValid(this.state.nameNoPadding)}
                                 onChangeText={
                                     (value) => this.onFieldChange('password', value)
                                 }
@@ -157,22 +115,12 @@ class SignIn extends Component {
 
                     </KeyboardAvoidingView>
 
-                </ScrollView>
+
 
             </Layout>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 4
-    }
-});
-
-const FormGroup = styled.View`
-  margin: 8px
-`;
 
 const mapStateToProps = (state) => {
     return {

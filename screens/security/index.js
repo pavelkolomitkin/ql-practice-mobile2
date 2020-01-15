@@ -37,7 +37,7 @@ class Index extends Component {
       const { header } = this.state;
 
     return (
-        <Layout>
+        <>
             <Appbar.Header>
                 <Appbar.Content
                     title="QL Practice"
@@ -56,7 +56,7 @@ class Index extends Component {
                     facebookAuth: () => <FacebookAuth componentId="facebookAuth" />,
                 })}
             />
-        </Layout>
+        </>
     )
   }
 }

@@ -26,6 +26,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security/security';
 import {Navigation} from 'react-native-navigation';
+import FormGroup from '../../components/common/form-group';
+import {TextInput, HelperText} from 'react-native-paper';
 
 class SignUp extends Component {
 
@@ -200,39 +202,78 @@ class SignUp extends Component {
 
         return (
 
-            <Layout title="Sign Up">
+            <Layout>
                 <KeyboardAwareScrollView>
-                    <Item style={{ paddingBottom: 10 }}>
 
-                        <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                        <Input placeholder='Your Email' value={email}
-                               onChangeText={
-                                   (value) => this.onFieldChangeHandler('email', value)
-                               }
+                    <FormGroup>
+                        <TextInput
+                            label="Your Email"
+                            style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                            value={email}
+                            onChangeText={
+                                (value) => this.onFieldChangeHandler('email', value)
+                            }
                         />
                         <FormFieldError name="email" errors={errors} />
+                    </FormGroup>
 
-                    </Item>
 
-                    <Item style={{ paddingBottom: 10 }}>
-                        <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
-                        <Input placeholder='Password' secureTextEntry value={password}
-                               onChangeText={
-                                   (value) => this.onFieldChangeHandler('password', value)
-                               }
+                    {/*<Item style={{ paddingBottom: 10 }}>*/}
+
+                    {/*    <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />*/}
+                    {/*    <Input placeholder='Your Email' value={email}*/}
+                    {/*           onChangeText={*/}
+                    {/*               (value) => this.onFieldChangeHandler('email', value)*/}
+                    {/*           }*/}
+                    {/*    />*/}
+                    {/*    <FormFieldError name="email" errors={errors} />*/}
+
+                    {/*</Item>*/}
+
+                    <FormGroup>
+                        <TextInput
+                            label="Password"
+                            style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                            value={password}
+                            onChangeText={
+                                (value) => this.onFieldChangeHandler('password', value)
+                            }
+                            secureTextEntry
                         />
                         <FormFieldError name="password" errors={errors} />
-                    </Item>
+                    </FormGroup>
 
-                    <Item style={{ paddingBottom: 10 }}>
-                        <Icon active name='user' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
-                        <Input placeholder='Your Name' value={name}
-                               onChangeText={
-                                   (value) => this.onFieldChangeHandler('name', value)
-                               }
+                    {/*<Item style={{ paddingBottom: 10 }}>*/}
+                    {/*    <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />*/}
+                    {/*    <Input placeholder='Password' secureTextEntry value={password}*/}
+                    {/*           onChangeText={*/}
+                    {/*               (value) => this.onFieldChangeHandler('password', value)*/}
+                    {/*           }*/}
+                    {/*    />*/}
+                    {/*    <FormFieldError name="password" errors={errors} />*/}
+                    {/*</Item>*/}
+
+                    <FormGroup>
+                        <TextInput
+                            label="Your Name"
+                            style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                            value={email}
+                            onChangeText={
+                                (value) => this.onFieldChangeHandler('name', value)
+                            }
                         />
                         <FormFieldError name="name" errors={errors} />
-                    </Item>
+                    </FormGroup>
+
+                    {/*<Item style={{ paddingBottom: 10 }}>*/}
+                    {/*    <Icon active name='user' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />*/}
+                    {/*    <Input placeholder='Your Name' value={name}*/}
+                    {/*           onChangeText={*/}
+                    {/*               (value) => this.onFieldChangeHandler('name', value)*/}
+                    {/*           }*/}
+                    {/*    />*/}
+                    {/*    <FormFieldError name="name" errors={errors} />*/}
+                    {/*</Item>*/}
 
                     <View style={{ paddingTop: 10 }}>
                         <FieldLabel>Your Native Language</FieldLabel>

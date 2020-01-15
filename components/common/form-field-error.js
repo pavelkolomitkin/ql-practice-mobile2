@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import React from 'react';
+import { HelperText } from 'react-native-paper';
 
 const FormFieldError = ({ errors, name }) => {
 
@@ -8,38 +7,14 @@ const FormFieldError = ({ errors, name }) => {
         (Array.isArray(errors[name]) ? errors[name] : [errors[name]])
         : null;
 
- return (
+    return (
 
-
-      items ?
-          <View>
-              {
-                  items.map((item, index) =>
-                      <Error key={'error_' + name + '_' + index}>
-                          <ErrorText>{item}</ErrorText>
-                      </Error>
-                  )
-              }
-          </View>
-          : null
-
- );
+        items &&
+        <HelperText
+            type="error"
+            visible={!!items}
+        >{ items.join(', ') }</HelperText>
+    );
 };
-
-
-FormFieldError.defaultProps = {
-    name: '',
-    errors: {}
-};
-
-const Error = styled.View`
-  padding-top: 5px;
-  padding-bottom: 5px;
-`;
-
-const ErrorText = styled.Text`
-  font-size: 11px;
-  color: red;
-`;
 
 export default FormFieldError;
