@@ -85,43 +85,41 @@ class RestorePassword extends Component {
 
         return (
             <Layout title="Restore Password">
-                <Content>
-                    <Item style={{ paddingBottom: 10 }}>
+                <Item style={{ paddingBottom: 10 }}>
 
-                        <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                        <Input placeholder='Your Email' value={email}
-                               onChangeText={
-                                   (value) => this.onFieldChangeHandler('email', value)
-                               }
-                        />
+                    <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
+                    <Input placeholder='Your Email' value={email}
+                           onChangeText={
+                               (value) => this.onFieldChangeHandler('email', value)
+                           }
+                    />
 
-                    </Item>
+                </Item>
 
-                    {
-                        (resendSecondsLeft > 0)
-                            ?
-                            <View>
-                                {
-                                    isSent &&
-                                        <Text success>The restore password link was sent on your email</Text>
-                                }
-                                <Text>You can request after : { resendSecondsLeft } second(s)</Text>
-                            </View>
+                {
+                    (resendSecondsLeft > 0)
+                        ?
+                        <View>
+                            {
+                                isSent &&
+                                <Text success>The restore password link was sent on your email</Text>
+                            }
+                            <Text>You can request after : { resendSecondsLeft } second(s)</Text>
+                        </View>
 
-                            :
-                            <Button
-                                style={{ justifyContent: 'center'}}
-                                onPress={this.onSubmit}
-                                disabled={isLoading}
-                                active={true}
-                                info
-                            >
-                                { !isLoading ? <Text style={{ color: '#fff', textTransform: 'uppercase'  }}>Restore</Text> :
-                                    <Spinner color='#fff'/>
-                                }
-                            </Button>
-                    }
-                </Content>
+                        :
+                        <Button
+                            style={{ justifyContent: 'center'}}
+                            onPress={this.onSubmit}
+                            disabled={isLoading}
+                            active={true}
+                            info
+                        >
+                            { !isLoading ? <Text style={{ color: '#fff', textTransform: 'uppercase'  }}>Restore</Text> :
+                                <Spinner color='#fff'/>
+                            }
+                        </Button>
+                }
             </Layout>
         );
     }

@@ -16,6 +16,8 @@ import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
+
 
 public class MainApplication extends NavigationApplication {
 
@@ -40,7 +42,8 @@ public class MainApplication extends NavigationApplication {
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
             new VectorIconsPackage(),
-            new FBSDKPackage()
+            new FBSDKPackage(),
+            new SafeAreaContextPackage()
         );
     }
 

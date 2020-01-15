@@ -2,6 +2,7 @@
 export default {
     overlay: 'app.Overlay',
     initialization: 'app.Initialization',
+    security: 'app.Security',
     securitySignUp: 'app.security.SignUp',
     securitySignIn: 'app.security.SignIn',
     securityRestorePassword: 'app.security.RestorePassword',

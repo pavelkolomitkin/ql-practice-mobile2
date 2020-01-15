@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 
-import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
 import Layout from './layout';
 import theme from '../../theme/index';
-import {
-    Item,
-    Input,
-    Button,
-    Text,
-    Spinner,
-    Toast
-} from 'native-base';
+import { withTheme, TextInput, HelperText, Button, Snackbar} from 'react-native-paper';
+import styled from 'styled-components';
+// import {
+//     Item,
+//     Input,
+//     Button,
+//     Text,
+//     Spinner,
+//     Toast
+// } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -24,7 +26,8 @@ class SignIn extends Component {
     state = {
         email: '',
         password: '',
-        isLoading: false
+        isLoading: false,
+        error: null
     };
 
     /**
@@ -73,13 +76,14 @@ class SignIn extends Component {
             })
             .catch(({ message }) => {
                 this.setState({
-                    isLoading: false
+                    isLoading: false,
+                    error: message
                 });
                 //console.log('LOGIN ERROR', message);
-                Toast.show({
-                    text: message,
-                    duration: 1500,
-                })
+                // Toast.show({
+                //     text: message,
+                //     duration: 1500,
+                // })
             });
     };
 
@@ -98,48 +102,77 @@ class SignIn extends Component {
 
     render() {
 
-        const { email, password, isLoading } = this.state;
+        const { email, password, isLoading, error } = this.state;
+        const { theme } = this.props;
 
         return (
-            <Layout title="Sign In">
-                <KeyboardAvoidingView >
+            <Layout>
+                <ScrollView contentContainerStyle={[ styles.container ]}>
+                    <KeyboardAvoidingView>
 
-                    <Item style={{ paddingBottom: 10 }}>
+                        <FormGroup>
+                            <TextInput
+                                label="Your Email"
+                                style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                                //placeholder="Your Email"
+                                value={email}
+                                // error={!this._isUsernameValid(this.state.nameNoPadding)}
+                                onChangeText={
+                                    (value) => this.onFieldChange('email', value)
+                                }
+                            />
+                        </FormGroup>
 
-                        <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                        <Input placeholder='Your Email' value={email} onChangeText={
-                            (value) => this.onFieldChange('email', value)
-                        }/>
+                        <FormGroup>
+                            <TextInput
+                                label="Password"
+                                style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                                //placeholder="Password"
+                                value={password}
+                                // error={!this._isUsernameValid(this.state.nameNoPadding)}
+                                onChangeText={
+                                    (value) => this.onFieldChange('password', value)
+                                }
+                                secureTextEntry
+                            />
+                        </FormGroup>
 
-                    </Item>
+                        <FormGroup>
+                            <Button
+                                mode="outlined"
+                                onPress={this.onSubmit}
+                                loading={isLoading}
+                                disabled={isLoading || !this.isFormValid()}
+                            >Sign In</Button>
+                        </FormGroup>
+                        <FormGroup>
+                            <Snackbar
+                                duration={3000}
+                                visible={!!error}
+                                onDismiss={() => this.setState({ error: false })}
+                            >
+                                { error }
+                            </Snackbar>
+                        </FormGroup>
 
-                    <Item last style={{ paddingBottom: 10 }}>
-                        <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />
-                        <Input placeholder='Password' secureTextEntry value={password}
-                               onChangeText={
-                                   (value) => this.onFieldChange('password', value)
-                               }
-                        />
-                    </Item>
+                    </KeyboardAvoidingView>
 
+                </ScrollView>
 
-                    <Button
-                        style={{ justifyContent: 'center' }}
-                        onPress={this.onSubmit}
-                        disabled={isLoading || !this.isFormValid()}
-                        active={true}
-                        info
-                    >
-                        { !isLoading ? <Text>Sign In</Text>:
-                            <Spinner color='#fff'/>
-                        }
-                    </Button>
-
-                </KeyboardAvoidingView>
             </Layout>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 4
+    }
+});
+
+const FormGroup = styled.View`
+  margin: 8px
+`;
 
 const mapStateToProps = (state) => {
     return {
@@ -153,4 +186,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(SignIn));

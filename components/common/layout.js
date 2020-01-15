@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import { View } from 'react-native';
-import { Root } from 'native-base';
+import { DefaultTheme, DarkTheme, Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import SafeAreaView from 'react-native-safe-area-view';
 
 export default ({children}) => {
     return (
-        <Root>
+        <PaperProvider theme={DefaultTheme}>
             { children }
-        </Root>
+        </PaperProvider>
     )
 }
