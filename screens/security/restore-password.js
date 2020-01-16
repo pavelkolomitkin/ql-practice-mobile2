@@ -5,10 +5,16 @@ import {Text, View} from 'react-native';
 import Layout from './layout';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from '../../theme';
-import {Button, Input, Item, Spinner, Content} from 'native-base';
+import { Input, Item, Spinner, Content} from 'native-base';
+import { Button } from 'react-native-paper';
+import validator from 'validator/es';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security/security';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {TextInput, Paragraph, Caption} from 'react-native-paper';
+import FormFieldError from '../../components/common/form-field-error';
+import FormGroup from '../../components/common/form-group';
 
 
 class RestorePassword extends Component {
@@ -40,6 +46,8 @@ class RestorePassword extends Component {
 
         this.setState({
             isLoading: true,
+            isSent: false,
+            errors: {}
         });
 
         const { email } = this.state;
@@ -52,7 +60,8 @@ class RestorePassword extends Component {
 
                 this.setState({
                     isLoading: false,
-                    resendSecondsLeft: this.getSendRestoreRequestInterval()
+                    resendSecondsLeft: this.getSendRestoreRequestInterval(),
+                    isSent: true
                 });
 
                 let timer = setInterval(() => {
@@ -70,56 +79,85 @@ class RestorePassword extends Component {
                     }
                 }, 1000);
             })
-            .catch((errors) => {
+            .catch(({ message }) => {
 
                 this.setState({
                     isLoading: false,
-                    errors
+                    errors: {
+                        email: [message]
+                    }
                 });
             });
     };
 
+    isFormValid()
+    {
+        const { email } = this.state;
+
+        return validator.isEmail(email);
+    }
+
     render() {
 
-        const { email, isLoading, resendSecondsLeft, isSent } = this.state;
+        const { email, errors, isLoading, resendSecondsLeft, isSent } = this.state;
 
         return (
             <Layout title="Restore Password">
-                <Item style={{ paddingBottom: 10 }}>
 
-                    <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />
-                    <Input placeholder='Your Email' value={email}
-                           onChangeText={
-                               (value) => this.onFieldChangeHandler('email', value)
-                           }
-                    />
+                <KeyboardAwareScrollView>
 
-                </Item>
-
-                {
-                    (resendSecondsLeft > 0)
-                        ?
-                        <View>
-                            {
-                                isSent &&
-                                <Text success>The restore password link was sent on your email</Text>
+                    <FormGroup>
+                        <TextInput
+                            label="Your Email"
+                            style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+                            value={email}
+                            onChangeText={
+                                (value) => this.onFieldChangeHandler('email', value)
                             }
-                            <Text>You can request after : { resendSecondsLeft } second(s)</Text>
-                        </View>
+                        />
+                        <FormFieldError name="email" errors={errors} />
+                        {
+                            isSent &&
+                            <View>
+                                <Caption>The restore password link was sent on your email</Caption>
+                            </View>
+                        }
+                        {
+                            (resendSecondsLeft > 0)
+                                ?
+                                <View>
+                                    <Caption>You can request after : { resendSecondsLeft } second(s)</Caption>
+                                </View>
 
-                        :
-                        <Button
-                            style={{ justifyContent: 'center'}}
-                            onPress={this.onSubmit}
-                            disabled={isLoading}
-                            active={true}
-                            info
-                        >
-                            { !isLoading ? <Text style={{ color: '#fff', textTransform: 'uppercase'  }}>Restore</Text> :
-                                <Spinner color='#fff'/>
-                            }
-                        </Button>
-                }
+                                :
+                                <FormGroup>
+                                    <Button
+                                        mode="outlined"
+                                        onPress={this.onSubmit}
+                                        loading={isLoading}
+                                        disabled={isLoading || !this.isFormValid()}
+                                    >
+                                        Restore
+                                    </Button>
+                                </FormGroup>
+
+                        }
+                    </FormGroup>
+
+                </KeyboardAwareScrollView>
+
+                {/*<Item style={{ paddingBottom: 10 }}>*/}
+
+                {/*    <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />*/}
+                {/*    <Input placeholder='Your Email' value={email}*/}
+                {/*           onChangeText={*/}
+                {/*               (value) => this.onFieldChangeHandler('email', value)*/}
+                {/*           }*/}
+                {/*    />*/}
+
+                {/*</Item>*/}
+
+
             </Layout>
         );
     }
