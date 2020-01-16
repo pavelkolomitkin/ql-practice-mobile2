@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-
-import {View, ActivityIndicator, Text} from 'react-native';
+import { View } from 'react-native';
+import {ActivityIndicator, Text, Headline, Title} from 'react-native-paper';
 import * as Navigation from '../navigation/index';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -12,7 +12,6 @@ import * as languageActions from '../redux/actions/language';
 class Initialization extends Component {
 
     state = {
-        isLoaded: false
     };
 
     async componentDidMount(): void {
@@ -48,18 +47,16 @@ class Initialization extends Component {
 
     render() {
 
-        const { isLoaded } = this.state;
-
         return (
 
             <Container>
                 <Header>QL Practice</Header>
-                { !isLoaded &&
-                    <ActivityIndicator
-                        size="large"
-                        color="#fff"
-                    />
-                }
+
+                <ActivityIndicator
+                    size="large"
+                    color="#fff"
+                />
+
             </Container>
         );
     }
