@@ -1,0 +1,19 @@
+let config = null;
+
+
+if (__DEV__)
+{
+    config =  {
+        serverBaseUrl: 'http://localhost:8080/api'
+    };
+}
+else
+{
+    // production
+    config =  {
+        serverBaseUrl: 'http://localhost/api'
+    };
+}
+
+
+export default config;
