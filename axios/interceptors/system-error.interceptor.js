@@ -1,10 +1,21 @@
 import {BaseInterceptor} from './base.interceptor';
 import store from '../../redux/store';
-import {SYSTEM_ERROR_INTERNAL_SERVER_ERROR} from '../../redux/actions/types';
+import {SYSTEM_ERROR_INTERNAL_SERVER_ERROR, SYSTEM_ERROR_INTERNAL_SERVER_ERROR_RESET} from '../../redux/actions/types';
 
 export default class SystemErrorInterceptor extends BaseInterceptor {
     apply(axios) {
         super.apply(axios);
+
+        axios.interceptors.request.use(
+            config => {
+
+                store.dispatch({
+                    type: SYSTEM_ERROR_INTERNAL_SERVER_ERROR_RESET,
+                });
+
+                return config;
+            }
+        )
 
         axios.interceptors.response.use(
             value => value,

@@ -1,6 +1,7 @@
 //======================== SYSTEM ERRORS ==================================
 
 export const SYSTEM_ERROR_INTERNAL_SERVER_ERROR = 'SYSTEM_ERROR_INTERNAL_SERVER_ERROR';
+export const SYSTEM_ERROR_INTERNAL_SERVER_ERROR_RESET = 'SYSTEM_ERROR_INTERNAL_SERVER_ERROR_RESET';
 
 //======================// SYSTEM ERRORS ==================================
 

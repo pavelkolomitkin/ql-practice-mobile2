@@ -1,5 +1,9 @@
 import * as types from '../actions/types';
 
+export const initialState = {
+    networkErrorMessage: null,
+};
+
 export const reducer = (state = {}, action) => {
 
     switch (action.type) {
@@ -8,7 +12,14 @@ export const reducer = (state = {}, action) => {
 
             return {
                 ...state,
-                errorMessage: action.message
+                networkErrorMessage: action.message
+            };
+
+        case types.SYSTEM_ERROR_INTERNAL_SERVER_ERROR_RESET:
+
+            return {
+                ...state,
+                networkErrorMessage: null
             };
 
         default:
