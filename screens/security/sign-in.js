@@ -68,7 +68,7 @@ class SignIn extends Component {
         const { theme } = this.props;
 
         return (
-            <Layout>
+            <Layout title="Sign In">
 
                     <KeyboardAvoidingView>
 

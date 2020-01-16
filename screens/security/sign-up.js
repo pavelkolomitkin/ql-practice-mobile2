@@ -198,7 +198,7 @@ class SignUp extends Component {
 
         return (
 
-            <Layout>
+            <Layout title="Sign Up">
                 <KeyboardAwareScrollView>
 
                     <FormGroup margin={this.formGroupMargin}>

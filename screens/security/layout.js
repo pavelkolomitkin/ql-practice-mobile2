@@ -1,11 +1,18 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import CommonLayout from '../../components/common/layout';
-import { Surface } from 'react-native-paper';
+import {Appbar, Surface} from 'react-native-paper';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, title }) => {
  return (
   <CommonLayout>
+      <Appbar.Header>
+          <Appbar.Content
+              title="QL Practice"
+              subtitle={title}
+          />
+      </Appbar.Header>
+
       <Surface style={{ margin: 5, elevation: 2, flex: 1 }}>
           <ScrollView contentContainerStyle={[ styles.container]}>
               { children }

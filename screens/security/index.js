@@ -47,6 +47,7 @@ class Index extends Component {
 
 
             <BottomNavigation
+                shifting={true}
                 navigationState={this.state}
                 onIndexChange={this.onTabIndexChange}
                 renderScene={BottomNavigation.SceneMap({

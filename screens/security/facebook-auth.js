@@ -98,7 +98,7 @@ class FacebookAuth extends Component {
         const { isLoading, error } = this.state;
 
         return (
-            <Layout>
+            <Layout title="Facebook Login">
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <Button
                         icon="facebook"
