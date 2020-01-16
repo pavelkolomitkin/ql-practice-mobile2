@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
  return (
   <CommonLayout>
       <Surface style={{ margin: 5, elevation: 2, flex: 1 }}>
-          <ScrollView contentContainerStyle={[ styles.container ]}>
+          <ScrollView contentContainerStyle={[ styles.container]}>
               { children }
           </ScrollView>
       </Surface>
@@ -18,7 +18,9 @@ const Layout = ({ children }) => {
 
 const styles = StyleSheet.create({
  container: {
-  padding: 4
+     padding: 4,
+     flex: 1,
+     flexDirection: 'column'
  }
 });
 

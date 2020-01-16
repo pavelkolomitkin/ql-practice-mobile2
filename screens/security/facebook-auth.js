@@ -5,7 +5,8 @@ import Layout from './layout';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security/facebook';
-import {Button, Spinner} from 'native-base';
+import { Spinner} from 'native-base';
+import { IconButton, withTheme, Button, Caption } from 'react-native-paper';
 import { LoginButton, AccessToken, LoginManager} from 'react-native-fbsdk';
 import * as navigation from '../../navigation/index';
 
@@ -93,20 +94,23 @@ class FacebookAuth extends Component {
 
     render() {
 
+        const { colors } = this.props.theme;
         const { isLoading, error } = this.state;
 
         return (
-            <Layout title="FaceBook Login">
-                <View>
+            <Layout>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <Button
-                        primary
+                        icon="facebook"
+                        mode="contained"
+                        color={colors.primary}
                         onPress={this.onLoginPressHandler}
+                        loading={isLoading}
                         disabled={isLoading}
                     >
-                        { isLoading && <Spinner color='#fff'/>}
-                        <Text>Log in</Text>
+                        Login
                     </Button>
-                    { !!error &&  <Text>{ error }</Text> }
+                    { !!error &&  <Caption>{ error }</Caption> }
                 </View>
             </Layout>
         );
@@ -125,4 +129,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FacebookAuth);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(FacebookAuth));
