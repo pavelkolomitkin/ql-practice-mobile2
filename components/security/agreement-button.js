@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Modal, ActivityIndicator } from 'react-native';
-import { Button, Text } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, ScrollView, Dimensions } from 'react-native';
+import { Text } from 'native-base';
+import { Button, withTheme, Dialog, Portal, Provider, ActivityIndicator, Title, Paragraph } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -66,61 +66,89 @@ class AgreementButton extends Component {
 
   getButton()
   {
+      const { colors } = this.props.theme;
       const { isAccepted } = this.state;
 
       if (isAccepted)
       {
           return (
               <Button
-                  active
-                  success onPress={this.onButtonPressHandler}>
-                  <Icon name="check" />
-                  <Text>Agreement</Text>
-
+                  icon="check-bold"
+                  color={colors.accent} onPress={this.onButtonPressHandler}>
+                  Agreement
               </Button>
           );
       }
 
       return (
-          <Button primary onPress={this.onButtonPressHandler}>
-              <Text>Agreement</Text>
+          <Button color={colors.primary} onPress={this.onButtonPressHandler}>
+              Agreement
           </Button>
       );
   }
 
   render() {
 
+      const { colors } = this.props.theme;
       const { isTextShown, agreement } = this.state;
 
 
       return (
           <View>
               { this.getButton() }
-              <Modal
-                animationType="slide"
-                transparent={false}
-                visible={isTextShown}
-                onRequestClose={this.onModalRequestClose}
-              >
-                  {
-                      !!agreement ?
-                          <View>
-                              <View>
-                                  <Text h2>Agreement</Text>
-                              </View>
-                              <View>
-                                  <Text>{ agreement }</Text>
-                              </View>
-                              <View>
-                                  <Button primary onPress={this.onAcceptClickHandler}>
-                                      <Text>Accept</Text>
-                                  </Button>
-                              </View>
-                          </View>
-                          : <ActivityIndicator size="large" color="primary" />
-                  }
 
-              </Modal>
+              <Portal>
+                  <Dialog
+                      onDismiss={this.onModalRequestClose}
+                      visible={isTextShown}
+                      style={{ maxHeight: 0.6 * Dimensions.get('window').height }}
+                  >
+                      <Dialog.Title>Agreement</Dialog.Title>
+                      { !!agreement ?
+                          <>
+                              <Dialog.ScrollArea style={{ paddingHorizontal: 0 }}>
+                                  <ScrollView contentContainerStyle={{ paddingHorizontal: 24 }}>
+                                      <Paragraph>
+                                          { agreement }
+                                      </Paragraph>
+                                  </ScrollView>
+                              </Dialog.ScrollArea>
+                              <Dialog.Actions>
+                                  <Button onPress={this.onAcceptClickHandler}>Accept</Button>
+                              </Dialog.Actions>
+                          </>
+                              : <ActivityIndicator />
+                      }
+                  </Dialog>
+              </Portal>
+
+
+
+              {/*<Modal*/}
+              {/*  animationType="slide"*/}
+              {/*  transparent={false}*/}
+              {/*  visible={isTextShown}*/}
+              {/*  onRequestClose={this.onModalRequestClose}*/}
+              {/*>*/}
+              {/*    {*/}
+              {/*        !!agreement ?*/}
+              {/*            <View>*/}
+              {/*                <View>*/}
+              {/*                    <Text h2>Agreement</Text>*/}
+              {/*                </View>*/}
+              {/*                <View>*/}
+              {/*                    <Text>{ agreement }</Text>*/}
+              {/*                </View>*/}
+              {/*                <View>*/}
+              {/*                    <Button primary onPress={this.onAcceptClickHandler}>*/}
+              {/*                        <Text>Accept</Text>*/}
+              {/*                    </Button>*/}
+              {/*                </View>*/}
+              {/*            </View>*/}
+              {/*            : <ActivityIndicator size="large" color="primary" />*/}
+              {/*    }*/}
+
+              {/*</Modal>*/}
           </View>
       );
   }
@@ -143,4 +171,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AgreementButton);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(AgreementButton));

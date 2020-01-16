@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { View } from 'react-native';
 
-const FormGroup = ({ children }) => {
+const FormGroup = ({ children, margin }) => {
  return (
-  <Container>
+  <View style={{ margin }}>
       { children }
-  </Container>
+  </View>
  );
 };
 
-const Container = styled.View`
-  margin: 8px
-`;
+FormGroup.propTypes = {
+ margin: PropTypes.number
+};
+
+FormGroup.defaultProps = {
+ margin: 8
+};
+
 
 export default FormGroup;

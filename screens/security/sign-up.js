@@ -1,33 +1,18 @@
 import React, {Component} from 'react';
 
 import validator from 'validator/es';
-import {View, KeyboardAvoidingView, TouchableOpacity, ScrollView} from 'react-native';
+import {View, KeyboardAvoidingView, TouchableOpacity, ScrollView, Picker, StyleSheet} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components';
 import Layout from './layout';
 import FormFieldError from '../../components/common/form-field-error';
 import AgreementButton from '../../components/security/agreement-button';
-import {
-    Item,
-    Input,
-    Button,
-    Text,
-    Spinner,
-    Toast,
-    Body,
-    Picker,
-    CheckBox,
-    ListItem,
-    Label
-} from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import theme from '../../theme';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions/security/security';
 import {Navigation} from 'react-native-navigation';
 import FormGroup from '../../components/common/form-group';
-import {TextInput, HelperText} from 'react-native-paper';
+import {TextInput, Paragraph, Caption, Button, Text, Title, Subheading, Avatar, Surface, withTheme} from 'react-native-paper';
 
 class SignUp extends Component {
 
@@ -44,6 +29,8 @@ class SignUp extends Component {
         isAccountCreated: false,
         isLoading: false
     };
+
+    formGroupMargin = 8;
 
     /**
      * @type EventSubscription
@@ -170,10 +157,20 @@ class SignUp extends Component {
 
     renderAccountCreated()
     {
+        const { colors } = this.props.theme;
+
         return (
-            <Layout title="Account is Created">
-                <Text h2>Check you email to confirm your account!</Text>
-            </Layout>
+
+            <Surface style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', elevation: 2, margin: 5}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' }}>
+                    <Avatar.Icon size={100} icon="check" color="white" style={{ backgroundColor: colors.accent }} />
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignContent: 'center' }}>
+                    <Paragraph >Check you email to confirm your account!</Paragraph>
+                </View>
+            </Surface>
+
+
         );
     }
 
@@ -186,7 +183,6 @@ class SignUp extends Component {
             nativeLanguage,
             practiceLanguage,
             practiceLanguageLevel,
-            isAgreementAccepted,
             errors,
             isAccountCreated,
             isLoading
@@ -205,7 +201,7 @@ class SignUp extends Component {
             <Layout>
                 <KeyboardAwareScrollView>
 
-                    <FormGroup>
+                    <FormGroup margin={this.formGroupMargin}>
                         <TextInput
                             label="Your Email"
                             style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
@@ -217,20 +213,7 @@ class SignUp extends Component {
                         <FormFieldError name="email" errors={errors} />
                     </FormGroup>
 
-
-                    {/*<Item style={{ paddingBottom: 10 }}>*/}
-
-                    {/*    <Icon active name='envelope' size={theme.form.icon.defaultSize * 0.7} style={{ marginRight: 5 }}  />*/}
-                    {/*    <Input placeholder='Your Email' value={email}*/}
-                    {/*           onChangeText={*/}
-                    {/*               (value) => this.onFieldChangeHandler('email', value)*/}
-                    {/*           }*/}
-                    {/*    />*/}
-                    {/*    <FormFieldError name="email" errors={errors} />*/}
-
-                    {/*</Item>*/}
-
-                    <FormGroup>
+                    <FormGroup margin={this.formGroupMargin}>
                         <TextInput
                             label="Password"
                             style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
@@ -243,21 +226,11 @@ class SignUp extends Component {
                         <FormFieldError name="password" errors={errors} />
                     </FormGroup>
 
-                    {/*<Item style={{ paddingBottom: 10 }}>*/}
-                    {/*    <Icon active name='lock' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />*/}
-                    {/*    <Input placeholder='Password' secureTextEntry value={password}*/}
-                    {/*           onChangeText={*/}
-                    {/*               (value) => this.onFieldChangeHandler('password', value)*/}
-                    {/*           }*/}
-                    {/*    />*/}
-                    {/*    <FormFieldError name="password" errors={errors} />*/}
-                    {/*</Item>*/}
-
-                    <FormGroup>
+                    <FormGroup margin={this.formGroupMargin}>
                         <TextInput
                             label="Your Name"
                             style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
-                            value={email}
+                            value={name}
                             onChangeText={
                                 (value) => this.onFieldChangeHandler('name', value)
                             }
@@ -265,24 +238,11 @@ class SignUp extends Component {
                         <FormFieldError name="name" errors={errors} />
                     </FormGroup>
 
-                    {/*<Item style={{ paddingBottom: 10 }}>*/}
-                    {/*    <Icon active name='user' size={theme.form.icon.defaultSize} style={{ marginRight: 5 }} />*/}
-                    {/*    <Input placeholder='Your Name' value={name}*/}
-                    {/*           onChangeText={*/}
-                    {/*               (value) => this.onFieldChangeHandler('name', value)*/}
-                    {/*           }*/}
-                    {/*    />*/}
-                    {/*    <FormFieldError name="name" errors={errors} />*/}
-                    {/*</Item>*/}
-
-                    <View style={{ paddingTop: 10 }}>
-                        <FieldLabel>Your Native Language</FieldLabel>
-                    </View>
-
-                    <Item style={{ paddingBottom: 10 }}>
+                    <FormGroup margin={this.formGroupMargin}>
+                        <Caption>Your Native Language</Caption>
 
                         <Picker
-
+                            style={styles.picker}
                             mode="dialog"
                             prompt="Your Native Language"
                             placeholder="Your Native Language"
@@ -298,14 +258,14 @@ class SignUp extends Component {
 
                         </Picker>
                         <FormFieldError name="nativeLanguage" errors={errors} />
-                    </Item>
 
-                    <View style={{ paddingTop: 10 }}>
-                        <FieldLabel>Language you practice</FieldLabel>
-                    </View>
 
-                    <Item style={{ paddingBottom: 10 }}>
+                    </FormGroup>
+
+                    <FormGroup margin={this.formGroupMargin}>
+                        <Caption>Language you practice</Caption>
                         <Picker
+                            style={styles.picker}
                             mode="dialog"
                             placeHolder="Language you practice"
                             prompt="Language you practice"
@@ -317,14 +277,13 @@ class SignUp extends Component {
                             }) }
                         </Picker>
                         <FormFieldError name="practiceLanguage" errors={errors} />
-                    </Item>
+                    </FormGroup>
 
-                    <View style={{ paddingTop: 10 }}>
-                        <FieldLabel>Your practice language level</FieldLabel>
-                    </View>
+                    <FormGroup margin={this.formGroupMargin}>
+                        <Caption>Your practice language level</Caption>
 
-                    <Item style={{ paddingBottom: 10 }}>
                         <Picker
+                            style={styles.picker}
                             mode="dialog"
                             prompt="Your practice language level"
                             placeHolder="Your practice language level"
@@ -337,25 +296,20 @@ class SignUp extends Component {
                         </Picker>
 
                         <FormFieldError name="practiceLanguageLevel" errors={errors} />
-                    </Item>
+                    </FormGroup>
 
+                    <FormGroup margin={this.formGroupMargin}>
+                        <AgreementButton onAcceptHandler={this.onAgreementAcceptHandler} />
+                    </FormGroup>
 
-                    <AgreementButton onAcceptHandler={this.onAgreementAcceptHandler} />
-
-
-
-                    <Button
-                        style={{ justifyContent: 'center' }}
-                        onPress={this.onSubmit}
-                        disabled={isLoading || !this.isFormValid()}
-                        active={true}
-                        info
-                    >
-                        { !isLoading ? <Text>Sign Up</Text>:
-                            <Spinner color='#fff'/>
-                        }
-                    </Button>
-
+                    <FormGroup margin={this.formGroupMargin}>
+                        <Button
+                            mode="outlined"
+                            onPress={this.onSubmit}
+                            loading={isLoading}
+                            disabled={isLoading || !this.isFormValid()}
+                        >Sign Up</Button>
+                    </FormGroup>
 
                 </KeyboardAwareScrollView>
             </Layout>
@@ -367,6 +321,17 @@ const FieldLabel = styled.Text`
   font-size: 13px;
   color: #9c9c9c
 `;
+
+const AccountCreatedContainer = styled.View`
+  flex: 1;
+`;
+
+const styles = StyleSheet.create({
+    picker: {
+        height: 35,
+        marginLeft: -8
+    },
+});
 
 const mapStateToProps = (state) => {
     return {
@@ -381,4 +346,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(SignUp));
