@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import { KeyboardAvoidingView } from 'react-native';
-import Layout from './layout';
+import Layout from '../../components/security/layout';
 import { withTheme, TextInput, Button, Snackbar} from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

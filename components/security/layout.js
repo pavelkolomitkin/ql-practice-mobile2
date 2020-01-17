@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import CommonLayout from '../../components/common/layout';
+import CommonLayout from '../common/layout';
 import {Appbar, Surface} from 'react-native-paper';
 
 const Layout = ({ children, title }) => {

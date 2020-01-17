@@ -8,5 +8,19 @@ export default {
     securityRestorePassword: 'app.security.RestorePassword',
     securityFacebookAuth: 'app.security.FacebookAuth',
 
-    profile: 'app.profile'
+    profile: {
+        my: 'app.profile.my',
+        myProfile: 'app.profile.myProfile',
+        myPublicChats: 'app.profile.myPublicChats',
+        recentPublicChats: 'app.profile.recentPublicChats',
+    },
+
+    partner:{
+        search: 'app.partner.search'
+    },
+
+    chats: {
+        private: 'app.chats.private',
+        public: 'app.chats.public',
+    }
 };
