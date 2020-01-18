@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import {Image, Text, View} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withTheme, Headline, Button,  Avatar, List, Subheading, Caption } from 'react-native-paper';
+import { withTheme, Headline, Button,  Avatar, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
 import Layout from '../../../components/client/layout';
 import * as actions from '../../../redux/actions/security/security';
 import DefaultAvatar from '../../../assets/default_avatar.png';
 import LanguageSkillItem from '../../../components/client/language-skill-item';
+import UserAvatar from '../../../components/client/profile/avatar';
 
 class MyProfile extends Component {
 
@@ -69,32 +70,39 @@ class MyProfile extends Component {
 
   render() {
 
-    const { colors } = this.props.theme;
+    const { user, theme: { colors } } = this.props;
     const { profile } = this.state;
 
     return (
 
         <Layout>
-          <View>
+          <View style={{ flex: 1 }}>
             <Button onPress={this.onLogoutPressHandler}>Logout</Button>
 
             {/* The picture and name */}
             <List.Section>
-              <View>
-                <Avatar.Image
-                    style={{}}
-                    source={profile.avatar}
-                    size={80}
-                />
+              <View style={{
+                flex: 1,
+                flexDirection: 'column',
+                paddingTop: 20,
+                paddingBottom: 20,
+              }}>
+                <View style={{ flex: 1, alignItems: 'center' }}>
+
+                  <UserAvatar user={user} />
+
+                </View>
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', color: Colors.grey600 }}>{ profile.fullName }</Text>
+                </View>
               </View>
-              <View>
-                <Subheading>{ profile.fullName }</Subheading>
-              </View>
+
             </List.Section>
             {/*// The picture and name */}
 
-            <List.Section title="About me">
+            <List.Section title="About Me">
               <Caption>{ profile.about }</Caption>
+
             </List.Section>
 
             <List.Section title="Language Skills">
@@ -124,7 +132,7 @@ MyProfile.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-
+    user: state.security.user
   };
 };
 
