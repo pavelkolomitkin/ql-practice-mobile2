@@ -43,6 +43,8 @@ target 'mobile' do
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'mobileTests' do
     inherit! :search_paths
     # Pods for testing

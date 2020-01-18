@@ -3,12 +3,30 @@ import PropTypes from 'prop-types';
 import { Text, View, TouchableWithoutFeedback, ImageBackground, Dimensions } from 'react-native';
 import { withTheme, Headline, Button, Avatar, IconButton, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
 import {connect} from 'react-redux';
+import ImagePicker from 'react-native-image-picker';
 
 class FullscreenPhoto extends Component {
 
   state = {
 
   };
+
+    onEditPressHandler = async () => {
+
+        await ImagePicker.showImagePicker({
+            title: 'Select Photo'
+        }, (response) => {
+
+            debugger
+            console.log(response);
+
+        });
+
+    };
+
+    onDeletePressHandler = () => {
+
+    };
 
   render() {
 
@@ -36,8 +54,8 @@ class FullscreenPhoto extends Component {
                   { isOwnPhoto &&
                       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
                           <View style={{ flex: 1, justifyContent: 'center' }}>
-                              <IconButton icon="pencil" />
-                              <IconButton icon="delete" />
+                              <IconButton icon="pencil" onPress={this.onEditPressHandler} />
+                              <IconButton icon="delete" onPress={this.onDeletePressHandler} />
                           </View>
                       </View>
                   }

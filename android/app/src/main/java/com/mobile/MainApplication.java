@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -47,7 +48,8 @@ public class MainApplication extends NavigationApplication {
             new FBSDKPackage(),
             new SafeAreaContextPackage(),
             new RNGestureHandlerPackage(),
-            new ReanimatedPackage()
+            new ReanimatedPackage(),
+            new ImagePickerPackage()
         );
     }
 

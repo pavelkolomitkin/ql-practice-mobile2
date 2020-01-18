@@ -129,6 +129,7 @@ android {
 
     defaultConfig {
         applicationId "com.mobile"
+        multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         missingDimensionStrategy "RNN.reactNativeVersion", "reactNative60"
@@ -180,6 +181,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation project(':react-native-image-picker')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
