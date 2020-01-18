@@ -89,7 +89,7 @@ class MyProfile extends Component {
               }}>
                 <View style={{ flex: 1, alignItems: 'center' }}>
 
-                  <UserAvatar user={user} />
+                  { user && <UserAvatar user={user} />}
 
                 </View>
                 <View style={{ flex: 1, alignItems: 'center' }}>

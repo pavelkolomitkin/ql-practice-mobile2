@@ -14,6 +14,7 @@ import MyProfileIndex from '../screens/client/profile/index';
 import MyProfile from '../screens/client/profile/my-profile';
 import MyPublicChats from '../screens/client/profile/my-public-chats';
 import RecentPublicChats from '../screens/client/profile/recent-public-chats';
+import FullscreenPhoto from '../components/client/profile/fullscreen-photo';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Provider } from 'react-redux';
@@ -41,14 +42,38 @@ const registerComponents = () => {
     Navigation.registerComponentWithRedux(titles.profile.myProfile, () => gestureHandlerRootHOC(MyProfile), Provider, store);
     Navigation.registerComponent(titles.profile.myPublicChats, () => gestureHandlerRootHOC(MyPublicChats), Provider, store);
     Navigation.registerComponent(titles.profile.recentPublicChats, () => gestureHandlerRootHOC(RecentPublicChats), Provider, store);
+    Navigation.registerComponentWithRedux(titles.profile.fullScreenPhoto, () => FullscreenPhoto, Provider, store);
+
 
     Navigation.registerComponentWithRedux(titles.partner.search, () => PartnerSearch, Provider, store);
     Navigation.registerComponentWithRedux(titles.chats.private, () => PrivateChats, Provider, store);
     Navigation.registerComponentWithRedux(titles.chats.public, () => PublicChats, Provider, store);
 
+
+
     //==============================// PROFILE ========================================
 
 
+};
+
+export const showFullScreenPhoto = async (user) => {
+
+    return await Navigation.showModal({
+        component: {
+            name: titles.profile.fullScreenPhoto,
+            passProps: {
+                user
+            },
+            options: {
+                topBar: {
+                    visible: true,
+                    title: {
+                        text: 'User Photo'
+                    }
+                }
+            }
+        }
+    })
 };
 
 export const setClientNavigation = async () => {

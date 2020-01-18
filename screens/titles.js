@@ -13,6 +13,7 @@ export default {
         myProfile: 'app.profile.myProfile',
         myPublicChats: 'app.profile.myPublicChats',
         recentPublicChats: 'app.profile.recentPublicChats',
+        fullScreenPhoto: 'app.profile.fullScreenPhoto'
     },
 
     partner:{
