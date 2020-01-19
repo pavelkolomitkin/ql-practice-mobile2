@@ -66,6 +66,13 @@ export const reducer = (state = {}, action) => {
                 agreement: action.text
             };
 
+        case types.SECURITY_UPDATE_AUTHORIZED_USER:
+
+            return {
+                ...state,
+                user: action.user
+            };
+
         default:
 
             return state;
