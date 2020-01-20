@@ -60,6 +60,10 @@ class FullscreenPhoto extends Component {
         ]);
     };
 
+    onCloseClickHandler = async () => {
+        await Navigation.dismissModal(this.props.componentId);
+    };
+
     componentDidMount(): void {
         const { user } = this.props;
 
@@ -99,9 +103,10 @@ class FullscreenPhoto extends Component {
 
                       { isOwnPhoto &&
                           <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
-                              <View style={{ flex: 1, justifyContent: 'center' }}>
-                                  <IconButton icon="pencil" onPress={this.onEditPressHandler} />
-                                  <IconButton icon="delete" onPress={this.onDeletePressHandler} />
+                              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                  <IconButton icon="pencil" color={Colors.white} onPress={this.onEditPressHandler} />
+                                  <IconButton icon="delete" color={Colors.white} onPress={this.onDeletePressHandler} />
+                                  <IconButton icon="close" color={Colors.white} onPress={this.onCloseClickHandler} />
                               </View>
                           </View>
                       }
