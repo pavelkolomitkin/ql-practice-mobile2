@@ -7,7 +7,7 @@ export default class PhotoService
      * @param photo: { uri: string, type: string, name: string }
      * @param onProgress: Function
      */
-    upload(photo, onProgress)
+    upload(photo, onProgress = null)
     {
         const data = new FormData();
         data.append('image', {
@@ -22,12 +22,11 @@ export default class PhotoService
                 },
                 onUploadProgress: (event) => {
 
-                    const progress = Math.ceil(event.loaded * 100 / event.total);
-
-                    onProgress(progress);
-
-                    //event.loaded
-                    //event.total
+                    if (onProgress)
+                    {
+                        const progress = Math.ceil(event.loaded * 100 / event.total);
+                        onProgress(progress);
+                    }
                 }
             })
             .then((response) => {

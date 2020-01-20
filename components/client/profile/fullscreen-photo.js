@@ -4,10 +4,10 @@ import { Text, View, TouchableWithoutFeedback, ImageBackground, Dimensions } fro
 import { withTheme, Headline, Button, Avatar, IconButton, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ImagePicker from 'react-native-image-picker';
-import PhotoService from '../../../services/client/photo-service';
 import * as securityActions from '../../../redux/actions/security/security';
+import * as photoActions from '../../../redux/actions/client/photo';
 import { Navigation } from 'react-native-navigation';
+import Toast from 'react-native-root-toast';
 
 class FullscreenPhoto extends Component {
 
@@ -18,61 +18,33 @@ class FullscreenPhoto extends Component {
 
     onEditPressHandler = async () => {
 
-        await ImagePicker.showImagePicker({
-            title: 'Select Photo'
-        }, (response) => {
+        try {
+            const user = await this.props.photoActions.upload();
 
-            if (response.didCancel)
-            {
-                return;
-            }
-
-            console.log(response);
-
-            const service = new PhotoService();
-
-            service.upload({
-                uri: response.uri,
-                fileName: response.fileName,
-                type: response.type
-            }, (progress) => {
-
-                console.log('UPLOAD PROGRESS', progress);
-
-            })
-                .then(async (user) => {
-                    await this.props.securityActions.updateUser(user);
-                    this.setState({
-                        user
-                    });
-                })
-                .catch((errors) => {
-                    debugger
-                })
-            ;
-        });
+            await this.props.securityActions.updateUser(user);
+            this.setState({
+                user
+            });
+        }
+        catch (error) {
+            console.log(error);
+            Toast.show('Cannot upload this photo');
+        }
 
     };
 
     onDeletePressHandler = async () => {
 
-        const service = new PhotoService();
+        try
+        {
+            const user = await this.props.photoActions.remove();
 
-        await service
-            .remove()
-            .then(async user => {
-                await this.props.securityActions.updateUser(user);
-
-                await Navigation.dismissModal(this.props.componentId);
-
-                // this.setState({
-                //     user
-                // });
-            })
-            .catch(errors => {
-                console.log('ERROR OF REMOVING THE PHOTO');
-            })
-        ;
+            await this.props.securityActions.updateUser(user);
+            await Navigation.dismissModal(this.props.componentId);
+        }
+        catch (e) {
+            Toast.show('Cannot delete the photo. Try it later');
+        }
     };
 
     componentDidMount(): void {
@@ -141,7 +113,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        securityActions: bindActionCreators(securityActions, dispatch)
+        securityActions: bindActionCreators(securityActions, dispatch),
+        photoActions: bindActionCreators(photoActions, dispatch),
     };
 };
 

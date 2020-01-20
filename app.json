@@ -1,4 +1,5 @@
 {
   "name": "ql_practice",
-  "displayName": "QL Practice"
+  "displayName": "QL Practice",
+  "uploadPhotoMaxSize": 7340032
 }
