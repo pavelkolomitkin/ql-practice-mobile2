@@ -2,16 +2,32 @@ import React, { Component } from 'react';
 import {Image, Text, View} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withTheme, Headline, Button,  Avatar, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
+import {
+  withTheme,
+  Headline,
+  Button,
+  Avatar,
+  List,
+  Subheading,
+  Caption,
+  Paragraph,
+  Title,
+  Colors,
+  IconButton
+} from 'react-native-paper';
 import Layout from '../../../components/client/layout';
 import * as actions from '../../../redux/actions/security/security';
 import DefaultAvatar from '../../../assets/default_avatar.png';
 import LanguageSkillItem from '../../../components/client/language-skill-item';
 import UserAvatar from '../../../components/client/profile/avatar';
+import FullNameEditForm from '../../../components/client/profile/fullname-edit-form';
 
 class MyProfile extends Component {
 
   state = {
+
+    isEditingFullName: false,
+
     profile: {
       avatar: DefaultAvatar,
       fullName: 'Pavel Kolomitkin',
@@ -68,59 +84,79 @@ class MyProfile extends Component {
     await this.props.actions.logout();
   };
 
+  onEditFullNamePressHandler = async () => {
+    this.setState({
+      isEditingFullName: true
+    });
+  };
+
+  onEditFullNameCloseHandler = () => {
+    this.setState({
+      isEditingFullName: false
+    });
+  };
+
   render() {
 
     const { user, theme: { colors } } = this.props;
-    const { profile } = this.state;
+    const { profile, isEditingFullName } = this.state;
 
     return (
 
         <Layout>
-          <View style={{ flex: 1 }}>
-            <Button onPress={this.onLogoutPressHandler}>Logout</Button>
+          {
+            user &&
+              <View style={{ flex: 1 }}>
+                <Button onPress={this.onLogoutPressHandler}>Logout</Button>
 
-            {/* The picture and name */}
-            <List.Section>
-              <View style={{
-                flex: 1,
-                flexDirection: 'column',
-                paddingTop: 20,
-                paddingBottom: 20,
-              }}>
-                <View style={{ flex: 1, alignItems: 'center' }}>
+                <List.Section>
+                  <View style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                  }}>
+                    <View style={{ flex: 1, alignItems: 'center' }}>
 
-                  { user && <UserAvatar user={user} />}
+                      { user && <UserAvatar user={user} />}
 
-                </View>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', color: Colors.grey600 }}>{ profile.fullName }</Text>
-                </View>
+                    </View>
+                    <View style={{ flex: 1, alignItems: 'center' }}>
+                      <Text style={{ fontSize: 18, fontWeight: 'bold', color: Colors.grey600 }}>{ user.fullName }</Text>
+                      <IconButton icon="pencil" onPress={this.onEditFullNamePressHandler} />
+                    </View>
+                    <View>
+                      <FullNameEditForm isVisible={isEditingFullName} onClose={this.onEditFullNameCloseHandler} />
+                    </View>
+                  </View>
+
+                </List.Section>
+
+
+                <List.Section title="About Me">
+                  <Caption>{ profile.about }</Caption>
+
+                </List.Section>
+
+                <List.Section title="Language Skills">
+
+                  {
+                    profile.skills.map(skill => <LanguageSkillItem
+                        key={skill.id}
+                        skill={skill}
+                    />)
+                  }
+
+                  <List.Item>
+                    <Button icon="plus-circle" color={colors.accent}>Add</Button>
+                  </List.Item>
+
+                </List.Section>
+
               </View>
+          }
 
-            </List.Section>
-            {/*// The picture and name */}
 
-            <List.Section title="About Me">
-              <Caption>{ profile.about }</Caption>
-
-            </List.Section>
-
-            <List.Section title="Language Skills">
-
-              {
-                profile.skills.map(skill => <LanguageSkillItem
-                    key={skill.id}
-                    skill={skill}
-                />)
-              }
-
-              <List.Item>
-                <Button icon="plus-circle" color={colors.accent}>Add</Button>
-              </List.Item>
-
-            </List.Section>
-
-          </View>
         </Layout>
     )
   }

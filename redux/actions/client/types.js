@@ -9,3 +9,10 @@ export const USER_PHOTO_REMOVE_SUCCESS = 'USER_PHOTO_REMOVE_SUCCESS';
 export const USER_PHOTO_REMOVE_ERROR = 'USER_PHOTO_REMOVE_ERROR';
 
 //==========================// UPLOADING PHOTOS ===========================
+
+//============================ PROFILE SIMPLE DATA ========================
+
+export const USER_UPDATE_PROFILE_SUCCESS = 'USER_UPDATE_PROFILE_SUCCESS';
+export const USER_UPDATE_PROFILE_ERROR = 'USER_UPDATE_PROFILE_ERROR';
+
+//==========================// PROFILE SIMPLE DATA ========================
