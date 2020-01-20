@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, TouchableWithoutFeedback, ImageBackground, Dimensions } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, ImageBackground, Dimensions, Alert } from 'react-native';
 import { withTheme, Headline, Button, Avatar, IconButton, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -35,16 +35,29 @@ class FullscreenPhoto extends Component {
 
     onDeletePressHandler = async () => {
 
-        try
-        {
-            const user = await this.props.photoActions.remove();
+        Alert.alert('Remove Picture?', 'Are you sure you wanna remove it?', [
+            {
+                text: 'Remove',
+                onPress: async () => {
 
-            await this.props.securityActions.updateUser(user);
-            await Navigation.dismissModal(this.props.componentId);
-        }
-        catch (e) {
-            Toast.show('Cannot delete the photo. Try it later');
-        }
+                    try
+                    {
+                        const user = await this.props.photoActions.remove();
+
+                        await this.props.securityActions.updateUser(user);
+                        await Navigation.dismissModal(this.props.componentId);
+                    }
+                    catch (e) {
+                        Toast.show('Cannot delete the photo. Try it later');
+                    }
+
+                }
+            },
+            {
+                text: 'Cancel',
+                onPress: () => {}
+            }
+        ]);
     };
 
     componentDidMount(): void {
