@@ -1,6 +1,7 @@
 import axios from '../../axios';
+import {BaseService} from './base-service';
 
-export default class ProfileService {
+export default class ProfileService extends BaseService {
 
     edit(user)
     {
@@ -9,9 +10,7 @@ export default class ProfileService {
                 fullName: user.fullName
             })
             .then(response => response.data)
-            .catch(errors => {
-                throw errors.response.data.errors || errors.response.data;
-            });
+            .catch(errors => this.catchErrors(errors));
     }
 
 }

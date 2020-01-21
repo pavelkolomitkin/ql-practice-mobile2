@@ -22,6 +22,7 @@ import LanguageSkillItem from '../../../components/client/language-skill-item';
 import UserAvatar from '../../../components/client/profile/avatar';
 import FullNameEditForm from '../../../components/client/profile/fullname-edit-form';
 import AboutMeEditForm from '../../../components/client/profile/about-me-edit-form';
+import SkillList from '../../../components/client/profile/skills/skill-list';
 
 class MyProfile extends Component {
 
@@ -150,16 +151,18 @@ class MyProfile extends Component {
 
                 <List.Section title="Language Skills">
 
-                  {
-                    profile.skills.map(skill => <LanguageSkillItem
-                        key={skill.id}
-                        skill={skill}
-                    />)
-                  }
+                  <SkillList />
 
-                  <List.Item>
-                    <Button icon="plus-circle" color={colors.accent}>Add</Button>
-                  </List.Item>
+                  {/*{*/}
+                  {/*  profile.skills.map(skill => <LanguageSkillItem*/}
+                  {/*      key={skill.id}*/}
+                  {/*      skill={skill}*/}
+                  {/*  />)*/}
+                  {/*}*/}
+
+                  {/*<List.Item>*/}
+                  {/*  <Button icon="plus-circle" color={colors.accent}>Add</Button>*/}
+                  {/*</List.Item>*/}
 
                 </List.Section>
 
