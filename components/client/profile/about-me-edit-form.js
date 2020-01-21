@@ -9,50 +9,39 @@ import * as securityActions from '../../../redux/actions/security/security';
 import * as profileActions from '../../../redux/actions/client/profile';
 import {connect} from 'react-redux';
 
-class FullNameEditForm extends Component {
+class AboutMeEditForm extends Component {
 
-  state = {
-      user: null,
-      isLoading: false,
-      errors: {}
-  };
+    state = {
+        user: null,
+        isLoading: false,
+        errors: {}
+    };
 
-  onDismissHandler = () => {
-      const { onClose } = this.props;
-      if (onClose)
-      {
-          onClose()
-      }
-  };
-
-  componentDidMount(): void {
-
-      const { user } = this.props;
-      this.setState({
-          user: {...user}
-      });
-  }
-
-    componentDidUpdate(prevProps): void {
-
-        const { user } = this.state;
-        if (user !== this.props.user)
+    onDismissHandler = () => {
+        const { onClose } = this.props;
+        if (onClose)
         {
-            this.setState({
-                user: this.props.user
-            });
+            onClose()
         }
+    };
+
+    componentDidMount(): void {
+
+        const { user } = this.props;
+        this.setState({
+            user: {...user}
+        });
     }
 
-  onChange = (name) => {
+    onChange = (aboutMe) => {
 
-      const { user } = this.state;
-      user.fullName = name;
+        const { user } = this.state;
+        user.aboutMe = aboutMe;
 
-      this.setState({
-          user
-      });
-  };
+        this.setState({
+            user
+        });
+    };
 
     onSubmitHandler = async () => {
 
@@ -66,7 +55,6 @@ class FullNameEditForm extends Component {
 
         try
         {
-            debugger
             await this.props.profileActions.edit(user);
             await this.props.securityActions.updateUser(user);
             if (onClose)
@@ -85,27 +73,40 @@ class FullNameEditForm extends Component {
         });
     };
 
+    componentDidUpdate(prevProps): void {
+
+        const { user } = this.state;
+        if (user !== this.props.user)
+        {
+            this.setState({
+                user: this.props.user
+            });
+        }
+    }
+
     render() {
 
-      const { isVisible, theme } = this.props;
-      const { user, errors, isLoading } = this.state;
+        const { isVisible, theme } = this.props;
+        const { user, errors, isLoading } = this.state;
 
         return (
             <Portal>
                 <Dialog visible={isVisible} onDismiss={this.onDismissHandler}>
-                    <Dialog.Title>You Full Name</Dialog.Title>
+                    <Dialog.Title>Tell about you</Dialog.Title>
                     {
                         user &&
                         <>
                             <Dialog.Content>
                                 <FormGroup>
                                     <TextInput
-                                        label="Your Full Name"
+                                        label="Tell about you"
                                         style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
-                                        value={user.fullName}
+                                        value={user.aboutMe}
                                         onChangeText={this.onChange}
+                                        multiline={true}
+                                        numberOfLines={4}
                                     />
-                                    <FormFieldError name="fullName" errors={errors} />
+                                    <FormFieldError name="aboutMe" errors={errors} />
                                 </FormGroup>
                             </Dialog.Content>
                             <Dialog.Actions>
@@ -125,11 +126,11 @@ class FullNameEditForm extends Component {
                     }
                 </Dialog>
             </Portal>
-    )
-  }
+        )
+    }
 }
 
-FullNameEditForm.propTypes = {
+AboutMeEditForm.propTypes = {
     isVisible: PropTypes.bool,
     onClose: PropTypes.func
 };
@@ -147,4 +148,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(FullNameEditForm));
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(AboutMeEditForm));

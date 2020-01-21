@@ -21,12 +21,15 @@ import DefaultAvatar from '../../../assets/default_avatar.png';
 import LanguageSkillItem from '../../../components/client/language-skill-item';
 import UserAvatar from '../../../components/client/profile/avatar';
 import FullNameEditForm from '../../../components/client/profile/fullname-edit-form';
+import AboutMeEditForm from '../../../components/client/profile/about-me-edit-form';
 
 class MyProfile extends Component {
 
   state = {
 
     isEditingFullName: false,
+
+    isEditingAboutMe: false,
 
     profile: {
       avatar: DefaultAvatar,
@@ -84,22 +87,28 @@ class MyProfile extends Component {
     await this.props.actions.logout();
   };
 
-  onEditFullNamePressHandler = async () => {
+  onEditPropPressHandler = async (propName) => {
+
+    const propStateName = 'isEditing' + propName;
+
     this.setState({
-      isEditingFullName: true
+      [propStateName]: true
     });
   };
 
-  onEditFullNameCloseHandler = () => {
+  onEditPropCloseHandler = (propName) => {
+
+    const propStateName = 'isEditing' + propName;
+
     this.setState({
-      isEditingFullName: false
+      [propStateName]: false
     });
   };
 
   render() {
 
     const { user, theme: { colors } } = this.props;
-    const { profile, isEditingFullName } = this.state;
+    const { profile, isEditingFullName, isEditingAboutMe } = this.state;
 
     return (
 
@@ -123,10 +132,10 @@ class MyProfile extends Component {
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
                       <Text style={{ fontSize: 18, fontWeight: 'bold', color: Colors.grey600 }}>{ user.fullName }</Text>
-                      <IconButton icon="pencil" onPress={this.onEditFullNamePressHandler} />
+                      <IconButton icon="pencil" onPress={() => this.onEditPropPressHandler('FullName')} />
                     </View>
                     <View>
-                      <FullNameEditForm isVisible={isEditingFullName} onClose={this.onEditFullNameCloseHandler} />
+                      <FullNameEditForm isVisible={isEditingFullName} onClose={() => this.onEditPropCloseHandler('FullName')} />
                     </View>
                   </View>
 
@@ -134,8 +143,9 @@ class MyProfile extends Component {
 
 
                 <List.Section title="About Me">
-                  <Caption>{ profile.about }</Caption>
-
+                  <Caption>{ !!user.aboutMe ? user.aboutMe : 'None' }</Caption>
+                  <IconButton icon="pencil" onPress={() => this.onEditPropPressHandler('AboutMe')}/>
+                  <AboutMeEditForm isVisible={isEditingAboutMe} onClose={() => this.onEditPropCloseHandler('AboutMe')} />
                 </List.Section>
 
                 <List.Section title="Language Skills">
