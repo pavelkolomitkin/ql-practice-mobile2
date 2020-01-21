@@ -151,7 +151,7 @@ class MyProfile extends Component {
 
                 <List.Section title="Language Skills">
 
-                  <SkillList />
+                  <SkillList user={user} />
 
                   {/*{*/}
                   {/*  profile.skills.map(skill => <LanguageSkillItem*/}

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as securityActions from '../../../../redux/actions/security/security';
 import CreateLanguageSkillForm from './create-language-skill-form';
+import LanguageSkillItem from '../../language-skill-item';
 
 class SkillList extends Component {
 
@@ -29,15 +30,39 @@ class SkillList extends Component {
     });
   };
 
+  getSkillList = () => {
+
+    const { user } = this.props;
+
+    const skills = user.skills.sort((a, b) => {
+
+      if (a.level.level > b.level.level)
+      {
+        return -1;
+      }
+      else if (a.level.level < b.level.level)
+      {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    return (skills.length > 0) ? skills.map(skill => <LanguageSkillItem key={skill.id} skill={skill} />) : null
+
+  };
+
   render() {
 
     const { isCreateFormVisible } = this.state;
+    const { user } = this.props;
 
     return (
-      <View>
+      <>
+        { this.getSkillList() }
         <Button onPress={this.onAddButtonPressHandler}>Add</Button>
         <CreateLanguageSkillForm isVisible={isCreateFormVisible} onClose={this.onCreateFormCloseHandler} />
-      </View>
+      </>
     )
   }
 }
