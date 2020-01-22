@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, TouchableWithoutFeedback, ImageBackground, Dimensions, Alert } from 'react-native';
-import { withTheme, Headline, Button, Avatar, IconButton, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
+import { withTheme, Headline, Button, Avatar, IconButton, List, Subheading, Caption, Paragraph, Title, Colors, ActivityIndicator } from 'react-native-paper';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as securityActions from '../../../redux/actions/security/security';
@@ -12,7 +12,7 @@ import Toast from 'react-native-root-toast';
 class FullscreenPhoto extends Component {
 
   state = {
-
+      isLoading: false
   };
 
 
@@ -27,10 +27,14 @@ class FullscreenPhoto extends Component {
             });
         }
         catch (error) {
-            console.log(error);
-            Toast.show('Cannot upload this photo');
+            if (!!error)
+            {
+                Toast.show('Cannot upload this photo');
+                this.setState({
+                    isLoading: false
+                });
+            }
         }
-
     };
 
     onDeletePressHandler = async () => {
@@ -64,6 +68,15 @@ class FullscreenPhoto extends Component {
         await Navigation.dismissModal(this.props.componentId);
     };
 
+    componentDidUpdate(prevProps): void {
+        if (!!this.props.startedUploadPhoto && (this.props.startedUploadPhoto !== prevProps.startedUploadPhoto))
+        {
+            this.setState({
+                isLoading: true
+            });
+        }
+    }
+
     componentDidMount(): void {
         const { user } = this.props;
 
@@ -72,9 +85,21 @@ class FullscreenPhoto extends Component {
         });
     }
 
+    onLoadImageStartHandler = () => {
+        this.setState({
+            isLoading: true
+        });
+    };
+
+    onLoadImageEndHandler = () => {
+        this.setState({
+            isLoading: false
+        });
+    };
+
     render() {
 
-        const { user } = this.state;
+        const { user, isLoading } = this.state;
         if (!user)
         {
             return null;
@@ -99,7 +124,10 @@ class FullscreenPhoto extends Component {
                           height: '100%',
                           backgroundColor: 'black'
                       }}
+                      onLoadStart={this.onLoadImageStartHandler}
+                      onLoadEnd={this.onLoadImageEndHandler}
                   >
+                      { isLoading && <ActivityIndicator/>}
 
                       { isOwnPhoto &&
                           <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
@@ -125,7 +153,8 @@ FullscreenPhoto.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        authUser: state.security.user
+        authUser: state.security.user,
+        startedUploadPhoto: state.photo.startedUploadPhoto
     };
 };
 

@@ -33,10 +33,15 @@ class Initialization extends Component {
 
         try
         {
-            await this
+            const user = await this
                 .props
                 .securityActions
                 .getUserInfo();
+
+            if (!user)
+            {
+                throw new Error('User is not initialized');
+            }
 
             await Navigation.setClientNavigation();
         }

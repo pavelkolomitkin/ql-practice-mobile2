@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withTheme, Headline, Button,  Avatar, List, Subheading, Caption, Paragraph, Title, Colors } from 'react-native-paper';
+import {
+    withTheme,
+    Headline,
+    Button,
+    Avatar,
+    List,
+    Subheading,
+    Caption,
+    Paragraph,
+    Title,
+    Colors,
+    ActivityIndicator
+} from 'react-native-paper';
 import DefaultAvatar from '../../../assets/default_avatar.png';
 import * as navigation from '../../../navigation/index';
 import * as securityActions from '../../../redux/actions/security/security';
@@ -13,7 +25,7 @@ import Toast from 'react-native-root-toast';
 class UserAvatar extends Component {
 
   state = {
-
+      isLoading: false
   };
 
   hasUserPhoto(user) {
@@ -46,9 +58,17 @@ class UserAvatar extends Component {
       }
   };
 
+    onLoadStartHandler = () => {
+
+    };
+
+    onLoadEndHandler = () => {
+
+    };
+
     render() {
 
-      const { user } = this.props;
+      const { user, isLoading } = this.props;
 
       const avatar = !this.hasUserPhoto(user) ? DefaultAvatar : {
           uri: user.photo.thumbs['medium']
@@ -56,18 +76,20 @@ class UserAvatar extends Component {
 
 
         return (
-          <View>
+          <View style={{ width: 150, height: 150 }}>
               <TouchableOpacity
                   onPress={this.onPressHandler}
               >
-                  <Avatar.Image
-
-                      style={{
-                          border: 1
-                      }}
+                  <ImageBackground
+                      style={{width: '100%', height: '100%'}}
+                      imageStyle={{ borderRadius: 150 }}
                       source={avatar}
-                      size={150}
-                  />
+                      onLoadStart={this.onLoadStartHandler}
+                      onLoadEnd={this.onLoadEndHandler}
+                  >
+                      { isLoading && <ActivityIndicator /> }
+
+                  </ImageBackground>
               </TouchableOpacity>
           </View>
         );
