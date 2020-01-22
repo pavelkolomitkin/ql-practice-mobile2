@@ -71,13 +71,17 @@ class EditLanguageSkillForm extends Component {
         const { skill } = this.state;
         const { languageLevels } = this.props;
 
-        if (!skill || (skill.id !== this.props.skill.id))
+        if (this.props.skill)
         {
-            this.setState({
-                skill: this.props.skill,
-                selectedLanguageLevel: languageLevels.find(item => item.id === this.props.skill.level.id)
-            });
+            if (!skill || (skill.id !== this.props.skill.id))
+            {
+                this.setState({
+                    skill: this.props.skill,
+                    selectedLanguageLevel: languageLevels.find(item => item.id === this.props.skill.level.id)
+                });
+            }
         }
+
     }
 
     componentDidMount(): void {
