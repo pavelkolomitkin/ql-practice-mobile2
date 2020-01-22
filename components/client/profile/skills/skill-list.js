@@ -11,13 +11,16 @@ import { bindActionCreators } from 'redux';
 import * as skillActions from '../../../../redux/actions/client/language-skill';
 import * as securityActions from '../../../../redux/actions/security/security';
 import CreateLanguageSkillForm from './create-language-skill-form';
-import LanguageSkillItem from '../../language-skill-item';
+import LanguageSkillItem from './language-skill-item';
 import Toast from 'react-native-root-toast';
+import EditLanguageSkillForm from './edit-language-skill-form';
 
 class SkillList extends Component {
 
   state = {
-    isCreateFormVisible: false
+    isCreateFormVisible: false,
+    isEditFormVisible: false,
+    editingSkill: null
   };
 
   onAddButtonPressHandler = () => {
@@ -29,6 +32,19 @@ class SkillList extends Component {
   onCreateFormCloseHandler = () => {
     this.setState({
       isCreateFormVisible: false
+    });
+  };
+
+  onEditFormCloseHandler = () => {
+    this.setState({
+      isEditFormVisible: false
+    });
+  };
+
+  onEditSkill = async (skill) => {
+    this.setState({
+      isEditFormVisible: true,
+      editingSkill: skill
     });
   };
 
@@ -86,6 +102,7 @@ class SkillList extends Component {
     return (skills.length > 0) ? skills.map(skill => <LanguageSkillItem
         key={skill.id}
         skill={skill}
+        onEdit={user.id === authUser.id ? this.onEditSkill : null}
         onRemove={user.id === authUser.id ? this.onRemoveSkill : null}
     />) : null
 
@@ -93,7 +110,7 @@ class SkillList extends Component {
 
   render() {
 
-    const { isCreateFormVisible } = this.state;
+    const { isCreateFormVisible, isEditFormVisible, editingSkill } = this.state;
     const { user } = this.props;
 
     return (
@@ -101,6 +118,7 @@ class SkillList extends Component {
         { this.getSkillList() }
         <Button onPress={this.onAddButtonPressHandler}>Add</Button>
         <CreateLanguageSkillForm isVisible={isCreateFormVisible} onClose={this.onCreateFormCloseHandler} />
+        <EditLanguageSkillForm isVisible={isEditFormVisible} skill={editingSkill} onClose={this.onEditFormCloseHandler} />
       </>
     )
   }

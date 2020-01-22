@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { List, Chip, Text, IconButton, Caption } from 'react-native-paper';
-import theme from '../../theme/index';
+import theme from '../../../../theme';
 
-const LanguageSkillItem = ({ skill, onRemove }) => {
+const LanguageSkillItem = ({ skill, onEdit, onRemove }) => {
  return (
      <View style={[styles.container, styles.column]}>
          <View>
@@ -31,6 +31,12 @@ const LanguageSkillItem = ({ skill, onRemove }) => {
 
          </View>
          <View>
+             {
+                 onEdit &&
+                 <IconButton
+                     icon="pencil"
+                     onPress={() => onEdit(skill)}/>
+             }
              {
                  onRemove &&
                  <IconButton

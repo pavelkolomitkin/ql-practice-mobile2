@@ -18,7 +18,7 @@ import {
 import Layout from '../../../components/client/layout';
 import * as actions from '../../../redux/actions/security/security';
 import DefaultAvatar from '../../../assets/default_avatar.png';
-import LanguageSkillItem from '../../../components/client/language-skill-item';
+import LanguageSkillItem from '../../../components/client/profile/skills/language-skill-item';
 import UserAvatar from '../../../components/client/profile/avatar';
 import FullNameEditForm from '../../../components/client/profile/fullname-edit-form';
 import AboutMeEditForm from '../../../components/client/profile/about-me-edit-form';
