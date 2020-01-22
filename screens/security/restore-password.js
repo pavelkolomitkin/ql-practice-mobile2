@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Text, View} from 'react-native';
 
-import Layout from './layout';
+import Layout from '../../components/security/layout';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from '../../theme';
 import { Input, Item, Spinner, Content} from 'native-base';

@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
@@ -43,7 +46,10 @@ public class MainApplication extends NavigationApplication {
         return Arrays.<ReactPackage>asList(
             new VectorIconsPackage(),
             new FBSDKPackage(),
-            new SafeAreaContextPackage()
+            new SafeAreaContextPackage(),
+            new RNGestureHandlerPackage(),
+            new ReanimatedPackage(),
+            new ImagePickerPackage()
         );
     }
 

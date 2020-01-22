@@ -10,13 +10,14 @@ export class UnAuthUserInterceptor extends BaseInterceptor
 
         axios.interceptors.response.use(
                 value => value,
-                error => {
+                async error => {
+
                             if (error.response.status === UnAuthUserInterceptor.UNAUTHORIZED_STATUS_CODE)
                             {
-                                securityActions.logout();
+                               await securityActions.logout();
                             }
 
-                            return Promise.reject(error);
+                            throw error;
                         }
             );
     }

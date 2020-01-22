@@ -39,6 +39,12 @@ target 'mobile' do
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'mobileTests' do
     inherit! :search_paths
     # Pods for testing

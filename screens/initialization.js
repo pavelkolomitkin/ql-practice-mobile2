@@ -16,10 +16,7 @@ class Initialization extends Component {
 
     async componentDidMount(): void {
 
-        const userLoading = this
-            .props
-            .securityActions
-            .getUserInfo();
+
 
         const languagesLoading = this
             .props
@@ -33,15 +30,23 @@ class Initialization extends Component {
 
         await languagesLoading;
         await languageLevelsLoading;
-        const user = await userLoading;
 
-        if (!user)
+        try
         {
-            await Navigation.setSecurityView();
-        }
-        else
-        {
+            const user = await this
+                .props
+                .securityActions
+                .getUserInfo();
+
+            if (!user)
+            {
+                throw new Error('User is not initialized');
+            }
+
             await Navigation.setClientNavigation();
+        }
+        catch (error) {
+            await Navigation.setSecurityView();
         }
     }
 

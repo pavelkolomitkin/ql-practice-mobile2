@@ -4,7 +4,7 @@ import validator from 'validator/es';
 import {View, KeyboardAvoidingView, TouchableOpacity, ScrollView, Picker, StyleSheet} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components';
-import Layout from './layout';
+import Layout from '../../components/security/layout';
 import FormFieldError from '../../components/common/form-field-error';
 import AgreementButton from '../../components/security/agreement-button';
 import { connect } from 'react-redux';

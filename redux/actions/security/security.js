@@ -117,6 +117,12 @@ export function logout() {
     };
 }
 
+export function updateUser(user) {
+    return (dispatch) => {
+        dispatch(userUpdate(user));
+    }
+}
+
 const userRegisterSuccess = () => {
     return {
         type: types.SECURITY_USER_REGISTER_SUCCESS
@@ -172,5 +178,12 @@ const restorePasswordRequestError = (errors) => {
     return {
         type: types.SECURITY_RESTORE_PASSWORD_REQUEST_ERROR,
         errors
+    };
+};
+
+const userUpdate = (user) => {
+    return {
+        type: types.SECURITY_UPDATE_AUTHORIZED_USER,
+        user
     };
 };

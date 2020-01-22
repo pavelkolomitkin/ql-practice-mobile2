@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import Layout from './layout';
+import Layout from '../../components/security/layout';
 import {BottomNavigation, withTheme, DefaultTheme, Colors} from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
