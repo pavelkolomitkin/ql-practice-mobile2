@@ -84,6 +84,20 @@ class CreateLanguageSkillForm extends Component {
         });
     }
 
+    componentDidUpdate(prevProps): void {
+
+        const { user } = this.state;
+
+        if (user !== prevProps.user)
+        {
+            this.setState({
+                user: prevProps.user
+            });
+
+            this.exceptExistingLanguageSkills();
+        }
+    }
+
     componentDidMount(): void {
 
         this.exceptExistingLanguageSkills();

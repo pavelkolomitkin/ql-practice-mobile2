@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { View } from 'react-native';
+import { View, Alert} from 'react-native';
 import {
   withTheme,
     Button
@@ -8,9 +8,11 @@ import {
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as skillActions from '../../../../redux/actions/client/language-skill';
 import * as securityActions from '../../../../redux/actions/security/security';
 import CreateLanguageSkillForm from './create-language-skill-form';
 import LanguageSkillItem from '../../language-skill-item';
+import Toast from 'react-native-root-toast';
 
 class SkillList extends Component {
 
@@ -30,9 +32,40 @@ class SkillList extends Component {
     });
   };
 
+  onRemoveSkill = async (skill) => {
+
+    //debugger
+    const { authUser } = this.props;
+
+    Alert.alert('Remove Skill?', 'Are you sure?', [
+      {
+        text: 'Remove',
+        onPress: async () => {
+
+          try
+          {
+            await this.props.skillActions.remove(skill);
+            const index = authUser.skills.findIndex(item => item.id === skill.id);
+            authUser.skills.splice(index, 1);
+
+            await this.props.securityActions.updateUser({...authUser});
+          }
+          catch (errors) {
+            Toast.show('Cannot remove this skill');
+          }
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => {}
+      }
+    ])
+
+  };
+
   getSkillList = () => {
 
-    const { user } = this.props;
+    const { user, authUser } = this.props;
 
     const skills = user.skills.sort((a, b) => {
 
@@ -48,7 +81,13 @@ class SkillList extends Component {
       return 0;
     });
 
-    return (skills.length > 0) ? skills.map(skill => <LanguageSkillItem key={skill.id} skill={skill} />) : null
+    //debugger
+
+    return (skills.length > 0) ? skills.map(skill => <LanguageSkillItem
+        key={skill.id}
+        skill={skill}
+        onRemove={user.id === authUser.id ? this.onRemoveSkill : null}
+    />) : null
 
   };
 
@@ -79,7 +118,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    securityActions: bindActionCreators(securityActions, dispatch)
+    securityActions: bindActionCreators(securityActions, dispatch),
+    skillActions: bindActionCreators(skillActions, dispatch),
   };
 };
 
