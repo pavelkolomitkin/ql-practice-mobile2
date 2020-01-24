@@ -37,7 +37,8 @@ export default class PublicConversationService extends BaseService
     {
         return axios
             .put('client/public-conversation/' + conversation.id, {
-                ...conversation
+                title: conversation.title,
+                language: conversation.language.id
             })
             .then(response => response.data.conversation)
             .catch(errors => this.catchErrors(errors))
@@ -47,9 +48,7 @@ export default class PublicConversationService extends BaseService
     setArchived(conversation, isArchived)
     {
         return axios
-            .put('client/public-conversation/' + conversation.id + '/archive/' + (isArchived ? '1' : '0'), {
-                ...conversation
-            })
+            .put('client/public-conversation/' + conversation.id + '/archive/' + (isArchived ? '1' : '0'))
             .then(response => response.data.conversation)
             .catch(errors => this.catchErrors(errors))
             ;

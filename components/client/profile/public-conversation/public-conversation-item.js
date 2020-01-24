@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Paragraph, Caption } from 'react-native-paper';
 
-const PublicConversationItem = ({ conversation }) => {
+const PublicConversationItem = ({ conversation, onContextMenu }) => {
  return (
-     <TouchableOpacity>
+     <TouchableOpacity onLongPress={(event) => onContextMenu(conversation, event)}>
        <Paragraph>{ conversation.title }</Paragraph>
        <Caption>{ conversation.language.title }</Caption>
      </TouchableOpacity>

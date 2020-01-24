@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, FlatList, VirtualizedList} from 'react-native';
-import {FAB, withTheme, Portal, ActivityIndicator, Paragraph} from 'react-native-paper';
+import {
+  FAB,
+  withTheme,
+  Portal,
+  ActivityIndicator,
+  Paragraph,
+  Menu
+} from 'react-native-paper';
 import {bindActionCreators} from 'redux';
 import * as conversationActions from '../../../../redux/actions/client/public-conversation';
 import {connect} from 'react-redux';
-import CreateConversationForm from './create-conversation-form';
 import PublicConversationService from '../../../../services/client/public-conversation-service';
 import PublicConversationItem from './public-conversation-item';
+import UpdateConversationForm from './update-conversation-form';
 
 
 class PublicConversationList extends Component {
@@ -14,8 +21,13 @@ class PublicConversationList extends Component {
   static ITEMS_PER_PAGE = 10;
 
   state = {
+    itemContextMenu: null,
+    contextMenuAnchor: { x: 0, y: 0},
+
+    updatingConversation: null,
+
     list: null,
-    isCreateFormVisible: false,
+    isUpdateFormVisible: false,
 
     noMoreItems: false,
     isLoading: false
@@ -25,26 +37,40 @@ class PublicConversationList extends Component {
 
   onAddButtonPressHandler = () => {
     this.setState({
-      isCreateFormVisible: true
+      isUpdateFormVisible: true
     });
   };
 
-  onCreateFormClose = () => {
+  onUpdateFormCloseHandler = () => {
     this.setState({
-      isCreateFormVisible: false
+      isUpdateFormVisible: false,
+      updatingConversation: null
     });
   };
 
   componentDidUpdate(prevProps): void {
 
-    if (this.props.createdPublic !== prevProps.createdPublic)
+    const {createdPublic, updatedPublic} = this.props;
+    const { list } = this.state;
+
+    if (!!createdPublic && (createdPublic !== prevProps.createdPublic))
     {
       // add the new one as the first one in the list
-      const { list } = this.state;
-
       this.setState({
-        list: [this.props.createdPublic, ...list]
+        list: [createdPublic, ...list]
       });
+    }
+    if (!!updatedPublic && (updatedPublic !== prevProps.updatedPublic))
+    {
+      const index = list.findIndex(item => item.id === updatedPublic.id);
+      if (index !== -1)
+      {
+        list[index] = updatedPublic;
+
+        this.setState({
+          list: [...list]
+        });
+      }
     }
   }
 
@@ -89,9 +115,44 @@ class PublicConversationList extends Component {
     console.log('LIST END REACHED', info);
   };
 
+  onContextMenuHandler = (conversation, event) => {
+
+    //debugger
+    const { nativeEvent } = event;
+    this.setState({
+      itemContextMenu: conversation,
+      contextMenuAnchor: {
+        x: nativeEvent.pageX,
+        y: nativeEvent.pageY - 40, // TODO fix it later
+      }
+    });
+  };
+
+  onHideContextMenuHandler = () => {
+    this.setState({
+      itemContextMenu: null,
+      contextMenuAnchor: {}
+    });
+  };
+
+  onEditConversationHandler = (conversation) => {
+    this.setState({
+      isUpdateFormVisible: true,
+      updatingConversation: conversation,
+      itemContextMenu: null
+    });
+  };
+
   render() {
 
-    const { isCreateFormVisible, list, isLoading } = this.state;
+    const {
+      isUpdateFormVisible,
+      list,
+      isLoading,
+      itemContextMenu,
+      contextMenuAnchor,
+      updatingConversation
+    } = this.state;
 
     return (
       <View style={styles.container} >
@@ -102,7 +163,11 @@ class PublicConversationList extends Component {
               list.length > 0 ?
                   <FlatList
                       data={list}
-                      renderItem={({ item }) => <PublicConversationItem key={item.id} conversation={item}/> }
+                      renderItem={({ item }) => <PublicConversationItem
+                          key={item.id}
+                          conversation={item}
+                          onContextMenu={this.onContextMenuHandler}
+                      /> }
                       keyExtractor={item => item.id.toString()}
                       onEndReached={this.onListEndReachedHandler}
                       onEndReachedThreshold={0.5}
@@ -123,14 +188,29 @@ class PublicConversationList extends Component {
           </>
         }
 
-        <CreateConversationForm
-          isVisible={isCreateFormVisible}
-          onClose={this.onCreateFormClose}
+        <Portal>
+          <Menu
+              visible={!!itemContextMenu}
+              onDismiss={this.onHideContextMenuHandler}
+              anchor={contextMenuAnchor}
+          >
+            <Menu.Item onPress={() => { this.onEditConversationHandler(itemContextMenu) }} title="Edit" />
+            <Menu.Item onPress={() => {}} title="Change Topics" />
+            <Menu.Item onPress={() => {}} title="Archive" />
+            {/*<Divider />*/}
+            {/*<Menu.Item onPress={() => {}} title="Item 3" disabled />*/}
+          </Menu>
+        </Portal>
+
+        <UpdateConversationForm
+          isVisible={isUpdateFormVisible}
+          onClose={this.onUpdateFormCloseHandler}
+          conversation={updatingConversation}
         />
         <Portal>
           <FAB
               style={styles.fab}
-              visible={!isCreateFormVisible}
+              visible={!isUpdateFormVisible}
               icon="plus"
               onPress={this.onAddButtonPressHandler}
           />
@@ -168,7 +248,8 @@ PublicConversationList.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    createdPublic: state.publicConversation.lastCreated
+    createdPublic: state.publicConversation.lastCreated,
+    updatedPublic: state.publicConversation.lastUpdated
   };
 };
 

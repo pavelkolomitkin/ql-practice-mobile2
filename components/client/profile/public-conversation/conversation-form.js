@@ -29,7 +29,6 @@ const ConversationForm = ({
                 <Dialog.Content>
 
                     <FormGroup>
-                        <Caption>Title</Caption>
                         <TextInput
                             label="Title"
                             style={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
