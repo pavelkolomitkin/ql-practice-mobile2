@@ -30,7 +30,6 @@ class PublicConversationList extends Component {
 
   state = {
     itemContextMenu: null,
-    contextMenuAnchor: { x: 0, y: 0},
 
     updatingConversation: null,
 
@@ -136,18 +135,17 @@ class PublicConversationList extends Component {
     const { nativeEvent } = event;
     this.setState({
       itemContextMenu: conversation,
-      contextMenuAnchor: {
-        x: nativeEvent.pageX,
-        y: nativeEvent.pageY - 40, // TODO fix it later
-      }
+    });
+  };
+
+  dismissContextMenu = () => {
+    this.setState({
+      itemContextMenu: null,
     });
   };
 
   onHideContextMenuHandler = () => {
-    this.setState({
-      itemContextMenu: null,
-      contextMenuAnchor: {}
-    });
+    this.dismissContextMenu();
   };
 
   onEditConversationHandler = (conversation) => {
@@ -254,6 +252,7 @@ class PublicConversationList extends Component {
         <Menu
             opened={!!itemContextMenu}
             renderer={ renderers.SlideInMenu}
+            onBackdropPress={() => this.dismissContextMenu()}
         >
           <MenuTrigger />
           <MenuOptions>
