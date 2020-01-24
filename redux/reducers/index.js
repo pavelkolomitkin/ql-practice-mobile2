@@ -6,6 +6,7 @@ import { reducer as language } from './language';
 import { reducer as photo } from './client/photo';
 import { reducer as profile } from './client/profile';
 import { reducer as languageSkill } from './client/language-skill';
+import { reducer as publicConversation } from './client/public-conversations';
 
 export const rootReducer = combineReducers({
     system,
@@ -13,5 +14,6 @@ export const rootReducer = combineReducers({
     language,
     photo,
     profile,
-    languageSkill
+    languageSkill,
+    publicConversation
 });

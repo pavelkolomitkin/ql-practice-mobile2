@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -63,8 +63,9 @@ class MyProfile extends Component {
     return (
 
         <Layout>
-          {
-            user &&
+          <ScrollView>
+            {
+              user &&
               <View style={{ flex: 1 }}>
                 <Button onPress={this.onLogoutPressHandler}>Logout</Button>
 
@@ -104,9 +105,8 @@ class MyProfile extends Component {
                 </List.Section>
 
               </View>
-          }
-
-
+            }
+          </ScrollView>
         </Layout>
     )
   }

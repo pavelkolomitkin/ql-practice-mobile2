@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { Headline } from 'react-native-paper';
 import Layout from '../../../components/client/layout';
+import PublicConversationList from '../../../components/client/profile/public-conversation/public-conversation-list';
 
 class MyPublicChats extends Component {
 
@@ -12,9 +13,7 @@ class MyPublicChats extends Component {
   render() {
     return (
         <Layout>
-          <View style={{ flex: 1 }}>
-            <Headline>My Public Chats</Headline>
-          </View>
+            <PublicConversationList />
         </Layout>
 
     )
