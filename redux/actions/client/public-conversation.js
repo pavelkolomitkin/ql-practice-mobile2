@@ -46,8 +46,7 @@ export const update = (conversation) => {
 export const setArchived = (conversation, isArchived) => {
     return (dispatch) => {
 
-        return this
-            .service
+        return service
             .setArchived(conversation, isArchived)
             .then(updated => {
 

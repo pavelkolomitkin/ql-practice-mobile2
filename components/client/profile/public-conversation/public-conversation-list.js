@@ -6,7 +6,8 @@ import {
   Portal,
   ActivityIndicator,
   Paragraph,
-  Menu
+  List,
+    TouchableRipple
 } from 'react-native-paper';
 import {bindActionCreators} from 'redux';
 import * as conversationActions from '../../../../redux/actions/client/public-conversation';
@@ -14,7 +15,14 @@ import {connect} from 'react-redux';
 import PublicConversationService from '../../../../services/client/public-conversation-service';
 import PublicConversationItem from './public-conversation-item';
 import UpdateConversationForm from './update-conversation-form';
-
+import Toast from 'react-native-root-toast';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  renderers
+} from 'react-native-popup-menu';
 
 class PublicConversationList extends Component {
 
@@ -62,17 +70,24 @@ class PublicConversationList extends Component {
     }
     if (!!updatedPublic && (updatedPublic !== prevProps.updatedPublic))
     {
-      const index = list.findIndex(item => item.id === updatedPublic.id);
-      if (index !== -1)
-      {
-        list[index] = updatedPublic;
-
-        this.setState({
-          list: [...list]
-        });
-      }
+      this.updateConversation(updatedPublic);
     }
   }
+
+  updateConversation = (conversation) => {
+
+    const { list } = this.state;
+
+    const index = list.findIndex(item => item.id === conversation.id);
+    if (index !== -1)
+    {
+      list[index] = conversation;
+
+      this.setState({
+        list: [...list]
+      });
+    }
+  };
 
   async componentDidMount(): void {
 
@@ -143,6 +158,29 @@ class PublicConversationList extends Component {
     });
   };
 
+  onToggleArchiveConversationHandler = async (conversation) => {
+
+    this.setState({
+      itemContextMenu: null
+    });
+    //debugger
+    try
+    {
+      const updatedConversation = await this.props.conversationActions.setArchived(conversation, !conversation.isArchived);
+      this.updateConversation(updatedConversation);
+    }
+    catch (error) {
+
+      let message = 'Can not archive the public';
+      if (!conversation.isArchived)
+      {
+        message = 'Can not unarchive the public';
+      }
+
+      Toast.show(message);
+    }
+  };
+
   render() {
 
     const {
@@ -188,19 +226,16 @@ class PublicConversationList extends Component {
           </>
         }
 
-        <Portal>
-          <Menu
-              visible={!!itemContextMenu}
-              onDismiss={this.onHideContextMenuHandler}
-              anchor={contextMenuAnchor}
-          >
-            <Menu.Item onPress={() => { this.onEditConversationHandler(itemContextMenu) }} title="Edit" />
-            <Menu.Item onPress={() => {}} title="Change Topics" />
-            <Menu.Item onPress={() => {}} title="Archive" />
-            {/*<Divider />*/}
-            {/*<Menu.Item onPress={() => {}} title="Item 3" disabled />*/}
-          </Menu>
-        </Portal>
+
+        {/*<Menu*/}
+        {/*    visible={!!itemContextMenu}*/}
+        {/*    onDismiss={this.onHideContextMenuHandler}*/}
+        {/*    anchor={contextMenuAnchor}*/}
+        {/*>*/}
+        {/*  <Menu.Item onPress={() => { this.onEditConversationHandler(itemContextMenu) }} title="Edit" />*/}
+        {/*  <Menu.Item onPress={() => { }} title="Change Topics" />*/}
+        {/*  <Menu.Item onPress={async () => { this.onToggleArchiveConversationHandler(itemContextMenu) }} title={ (!!itemContextMenu && itemContextMenu.isArchived) ? 'UnArchive' : 'Archive' } />*/}
+        {/*</Menu>*/}
 
         <UpdateConversationForm
           isVisible={isUpdateFormVisible}
@@ -215,6 +250,43 @@ class PublicConversationList extends Component {
               onPress={this.onAddButtonPressHandler}
           />
         </Portal>
+
+        <Menu
+            opened={!!itemContextMenu}
+            renderer={ renderers.SlideInMenu}
+        >
+          <MenuTrigger />
+          <MenuOptions>
+
+            <MenuOption onSelect={() => {this.onEditConversationHandler(itemContextMenu)}}>
+              <List.Item
+                  title="Edit"
+                  left={props => <List.Icon {...props} icon="pencil" />}
+              />
+            </MenuOption>
+
+            <MenuOption>
+              <List.Item
+                  title="Change Topics"
+                  left={props => <List.Icon {...props} icon="tag" />}
+              />
+            </MenuOption>
+
+            <MenuOption onSelect={() => this.onToggleArchiveConversationHandler(itemContextMenu)}>
+              <List.Item
+                  title={(!!itemContextMenu && itemContextMenu.isArchived) ? 'UnArchive' : 'Archive'}
+                  left={props => <List.Icon {...props} icon="delete" />}
+              />
+            </MenuOption>
+
+            {/*<MenuOption onSelect={() => alert(`Save`)} text='Save' />*/}
+            {/*<MenuOption onSelect={() => alert(`Delete`)} >*/}
+            {/*  <Text style={{color: 'red'}}>Delete</Text>*/}
+            {/*</MenuOption>*/}
+            {/*<MenuOption onSelect={() => alert(`Not called`)} disabled={true} text='Disabled' />*/}
+          </MenuOptions>
+        </Menu>
+
       </View>
     )
   }

@@ -7,6 +7,9 @@ const PublicConversationItem = ({ conversation, onContextMenu }) => {
      <TouchableOpacity onLongPress={(event) => onContextMenu(conversation, event)}>
        <Paragraph>{ conversation.title }</Paragraph>
        <Caption>{ conversation.language.title }</Caption>
+         {conversation.isArchived &&
+            <Caption>(Archived)</Caption>
+         }
      </TouchableOpacity>
  );
 };
