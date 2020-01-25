@@ -1,20 +1,41 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { Text, View, StyleSheet, TextInput, ScrollView} from 'react-native';
-import { IconButton } from 'react-native-paper';
+import { Text, View, StyleSheet, TextInput, ScrollView, Keyboard} from 'react-native';
+import { IconButton, Portal } from 'react-native-paper';
 import EmojiSelector, { Categories } from 'react-native-emoji-selector';
 
 class MessageInput extends Component {
 
   state = {
       text: '',
+      isSmileSelectorVisible: false
   };
 
 
 
   onSmileButtonPressHandler = () => {
 
+      const isSmileSelectorVisible = !this.state.isSmileSelectorVisible;
+      if (!isSmileSelectorVisible)
+      {
+          this.textInput.focus();
+      }
+      else
+      {
+          this.textInput.blur();
+          Keyboard.dismiss();
+      }
+
+      this.setState({
+          isSmileSelectorVisible: isSmileSelectorVisible
+      });
   };
+
+    onTextInputFocusHandler = () => {
+        this.setState({
+            isSmileSelectorVisible: false
+        });
+    };
 
   onTextChangeHandler = (value) => {
       this.setState({
@@ -27,52 +48,76 @@ class MessageInput extends Component {
   };
 
   onSmileSelectHandler = (emoji) => {
-      console.log(emoji);
+
+      let { text } = this.state;
+
+      if (!!this.textInput._lastNativeSelection)
+      {
+          const { start, end } = this.textInput._lastNativeSelection;
+          text = text.substring(0, start) + emoji + text.substring(end);
+      }
+      else
+      {
+          text += emoji;
+      }
+
+      this.setState({
+          text
+      });
   };
 
+
   render() {
-      const { text } = this.state;
+      const { text, isSmileSelectorVisible } = this.state;
 
     return (
-      <View style={styles.container}>
+      <>
 
           <View style={styles.row}>
               <View style={styles.textInputContainer}>
                   <View style={styles.smileButtonContainer}>
-                      <IconButton icon="emoticon" onPress={this.onSmileButtonPressHandler}/>
+                      <IconButton
+                          icon={ isSmileSelectorVisible ? 'keyboard' : 'emoticon'}
+                          onPress={this.onSmileButtonPressHandler}
+                      />
                   </View>
                   <TextInput
+                      ref={(input) => this.textInput = input}
                       style={styles.textInput}
                       value={text}
-                      onChangeText={this.onTextChangeHandler} />
+                      onChangeText={this.onTextChangeHandler}
+                      onFocus={this.onTextInputFocusHandler}
+                  />
               </View>
               <View style={styles.submitButtonContainer}>
                   <IconButton icon="chevron-right" onPress={this.onSendButtonPressHandler} />
                   {/*<IconButton icon="microphone" />*/}
               </View>
           </View>
-          <View>
-              <ScrollView>
+          <View style={ isSmileSelectorVisible ? {
+              flex: 3
+          } : {
+              height: 0
+          } }>
+              <ScrollView showsVerticalScrollIndicator={true}>
                   <EmojiSelector
-                      onEmojiSelected={emoji => this.setState({ emoji })}
-                      showSearchBar={true}
+                      onEmojiSelected={(emoji) => this.onSmileSelectHandler(emoji)}
+                      showSearchBar={false}
                       showTabs={true}
                       showHistory={true}
                       showSectionTitles={true}
                       columns={10}
-                      category={Categories.all}
+                      category={Categories.people}
                   />
               </ScrollView>
-
           </View>
-      </View>
+      </>
     )
   }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         flexDirection: 'column'
     },
 

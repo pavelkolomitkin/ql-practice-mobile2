@@ -100,9 +100,9 @@ class Conversation extends NavigationComponent {
 
           </View>
 
-          <View style={styles.inputContainer}>
-            <MessageInput />
-          </View>
+
+          <MessageInput />
+
 
         </Layout>
     )
@@ -111,13 +111,9 @@ class Conversation extends NavigationComponent {
 
 const styles = StyleSheet.create({
   messageListContainer: {
-    flex: 1,
+    flex: 2,
     backgroundColor: '#00cc31'
   },
-  inputContainer: {
-      height: 250,
-     // backgroundColor: '#004ccc'
-  }
 });
 
 Conversation.propTypes = {
