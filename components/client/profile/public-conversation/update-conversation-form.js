@@ -39,6 +39,10 @@ class UpdateConversationForm extends DialogForm {
   componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
 
     const { isVisible, conversation, user } = this.props;
+    if (!user)
+    {
+      return;
+    }
 
     if (isVisible && !prevProps.isVisible)
     {
@@ -62,6 +66,10 @@ class UpdateConversationForm extends DialogForm {
   componentDidMount(): void {
 
     const { conversation, user } = this.props;
+    if (!user)
+    {
+      return;
+    }
 
     if (!!conversation)
     {
@@ -83,6 +91,10 @@ class UpdateConversationForm extends DialogForm {
 
     const { errors, isLoading, title, selectedLanguage } = this.state;
     const { user, isVisible } = this.props;
+    if (!user)
+    {
+      return (<></>);
+    }
 
     return (
       <ConversationForm

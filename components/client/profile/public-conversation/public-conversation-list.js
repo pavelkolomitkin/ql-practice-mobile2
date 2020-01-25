@@ -24,6 +24,8 @@ import {
   renderers
 } from 'react-native-popup-menu';
 
+import * as navigation from '../../../../navigation/index';
+
 class PublicConversationList extends Component {
 
   static ITEMS_PER_PAGE = 10;
@@ -39,6 +41,12 @@ class PublicConversationList extends Component {
     noMoreItems: false,
     isLoading: false
   };
+
+  constructor(props) {
+    super(props);
+
+    this.onPressConversationHandler = this.onPressConversationHandler.bind(this);
+  }
 
   service = new PublicConversationService();
 
@@ -129,10 +137,8 @@ class PublicConversationList extends Component {
     console.log('LIST END REACHED', info);
   };
 
-  onContextMenuHandler = (conversation, event) => {
+  onContextMenuHandler = (conversation) => {
 
-    //debugger
-    const { nativeEvent } = event;
     this.setState({
       itemContextMenu: conversation,
     });
@@ -142,10 +148,6 @@ class PublicConversationList extends Component {
     this.setState({
       itemContextMenu: null,
     });
-  };
-
-  onHideContextMenuHandler = () => {
-    this.dismissContextMenu();
   };
 
   onEditConversationHandler = (conversation) => {
@@ -179,6 +181,13 @@ class PublicConversationList extends Component {
     }
   };
 
+  onPressConversationHandler = async (conversation) => {
+    //
+    // debugger
+    //
+    await navigation.showPublicChat(conversation, this);
+  };
+
   render() {
 
     const {
@@ -186,7 +195,6 @@ class PublicConversationList extends Component {
       list,
       isLoading,
       itemContextMenu,
-      contextMenuAnchor,
       updatingConversation
     } = this.state;
 
@@ -203,6 +211,7 @@ class PublicConversationList extends Component {
                           key={item.id}
                           conversation={item}
                           onContextMenu={this.onContextMenuHandler}
+                          onPress={this.onPressConversationHandler}
                       /> }
                       keyExtractor={item => item.id.toString()}
                       onEndReached={this.onListEndReachedHandler}
@@ -223,17 +232,6 @@ class PublicConversationList extends Component {
             }
           </>
         }
-
-
-        {/*<Menu*/}
-        {/*    visible={!!itemContextMenu}*/}
-        {/*    onDismiss={this.onHideContextMenuHandler}*/}
-        {/*    anchor={contextMenuAnchor}*/}
-        {/*>*/}
-        {/*  <Menu.Item onPress={() => { this.onEditConversationHandler(itemContextMenu) }} title="Edit" />*/}
-        {/*  <Menu.Item onPress={() => { }} title="Change Topics" />*/}
-        {/*  <Menu.Item onPress={async () => { this.onToggleArchiveConversationHandler(itemContextMenu) }} title={ (!!itemContextMenu && itemContextMenu.isArchived) ? 'UnArchive' : 'Archive' } />*/}
-        {/*</Menu>*/}
 
         <UpdateConversationForm
           isVisible={isUpdateFormVisible}

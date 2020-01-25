@@ -17,6 +17,13 @@ export default class PublicConversationService extends BaseService
             .then(response => response.data.list)
     }
 
+    get(id)
+    {
+        return axios
+            .get('client/public-conversation/' + id)
+            .then(response => response.data.conversation);
+    }
+
     /**
      * @param title string
      * @param language Object

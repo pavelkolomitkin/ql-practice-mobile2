@@ -22,6 +22,8 @@ import store from '../redux/store';
 import PartnerSearch from '../screens/client/partner-search';
 import PrivateChats from '../screens/client/private-chats';
 import PublicChats from '../screens/client/public-chats';
+import PublicChat from '../screens/client/public-chats/conversation';
+import NavigationComponent from '../components/common/navigation-component';
 
 const registerComponents = () => {
 
@@ -44,16 +46,41 @@ const registerComponents = () => {
     Navigation.registerComponent(titles.profile.recentPublicChats, () => gestureHandlerRootHOC(RecentPublicChats), Provider, store);
     Navigation.registerComponentWithRedux(titles.profile.fullScreenPhoto, () => FullscreenPhoto, Provider, store);
 
+    //==============================// PROFILE ========================================
+
+    //================================ PUBLIC CHANNELS ================================
+
+    Navigation.registerComponentWithRedux(titles.chats.public, () => PublicChats, Provider, store);
+    Navigation.registerComponentWithRedux(titles.chats.publicChat, () => PublicChat, Provider, store);
+
+    //==============================// PUBLIC CHANNELS ================================
 
     Navigation.registerComponentWithRedux(titles.partner.search, () => PartnerSearch, Provider, store);
     Navigation.registerComponentWithRedux(titles.chats.private, () => PrivateChats, Provider, store);
-    Navigation.registerComponentWithRedux(titles.chats.public, () => PublicChats, Provider, store);
 
+};
 
+export const showPublicChat = async (conversation) => {
 
-    //==============================// PROFILE ========================================
-
-
+    return await Navigation.showModal({
+        stack: {
+            children: [
+                {
+                    component: {
+                        name: titles.chats.publicChat,
+                        passProps: {
+                            conversation: conversation
+                        },
+                        options: {
+                            topBar: {
+                                visible: false,
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    });
 };
 
 export const showFullScreenPhoto = async (user) => {
@@ -78,96 +105,125 @@ export const showFullScreenPhoto = async (user) => {
 
 export const setClientNavigation = async () => {
 
+    await Promise.all([
+        Icon.getImageSource('account', 30, theme.colors.icon.defaultColor),
+        Icon.getImageSource('account-search', 30, theme.colors.icon.defaultColor),
+        Icon.getImageSource('chat', 30, theme.colors.icon.defaultColor),
+        Icon.getImageSource('forum', 30, theme.colors.icon.defaultColor)
+    ]).then( async ([myProfileIcon,
+          partnerSearchIcon,
+          privateChatsIcon,
+          publicChatsIcon,]) => {
 
-    const myProfileIcon = await Icon.getImageSource('account', 30, theme.colors.icon.defaultColor);
-    const partnerSearchIcon = await Icon.getImageSource('account-search', 30, theme.colors.icon.defaultColor);
-    const privateChatsIcon = await Icon.getImageSource('chat', 30, theme.colors.icon.defaultColor);
-    const publicChatsIcon = await Icon.getImageSource('forum', 30, theme.colors.icon.defaultColor);
-
-
-    await Navigation.setRoot({
-        root: {
-            bottomTabs: {
-                children: [
-                    {
-                        stack: {
-                            children: [
-                                {
-                                    component: {
-                                        name: titles.chats.public,
-                                        options: {
-                                            bottomTab: {
-                                                text: 'Channels',
-                                                icon: publicChatsIcon
-                                            },
+            await Navigation.setRoot({
+                root: {
+                    bottomTabs: {
+                        children: [
+                            {
+                                stack: {
+                                    options: {
+                                        topBar: {
+                                            visible: false
                                         }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        stack: {
-                            children: [
-                                {
-                                    component: {
-                                        name: titles.partner.search,
-                                        options: {
-                                            bottomTab: {
-                                                text: 'Partners',
-                                                icon: partnerSearchIcon
-                                            },
+                                    },
+                                    children: [
+                                        {
+                                            component: {
+                                                name: titles.chats.public,
+                                                options: {
+                                                    bottomTab: {
+                                                        text: 'Channels',
+                                                        icon: publicChatsIcon
+                                                    },
+                                                }
+                                            }
                                         }
-                                    }
+                                    ]
                                 }
-                            ]
-                        }
-                    },
-                    {
-                        stack: {
-                            children: [
-                                {
-                                    component: {
-                                        name: titles.chats.private,
-                                        options: {
-                                            bottomTab: {
-                                                text: 'My Chats',
-                                                icon: privateChatsIcon
-                                            },
+                            },
+                            {
+                                stack: {
+                                    options: {
+                                        topBar: {
+                                            visible: false
                                         }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        stack: {
-                            children: [
-                                {
-                                    component: {
-                                        name: titles.profile.my,
-                                        options: {
-                                            bottomTab: {
-                                                text: 'Profile',
-                                                icon: myProfileIcon
-                                            },
+                                    },
+                                    children: [
+                                        {
+                                            component: {
+                                                name: titles.partner.search,
+                                                options: {
+                                                    bottomTab: {
+                                                        text: 'Partners',
+                                                        icon: partnerSearchIcon
+                                                    },
+                                                }
+                                            }
                                         }
-                                    }
+                                    ]
                                 }
-                            ],
+                            },
+                            {
+                                stack: {
+                                    options: {
+                                        topBar: {
+                                            visible: false
+                                        }
+                                    },
+                                    children: [
+                                        {
+                                            component: {
+                                                name: titles.chats.private,
+                                                options: {
+                                                    bottomTab: {
+                                                        text: 'My Chats',
+                                                        icon: privateChatsIcon
+                                                    },
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                stack: {
+                                    options: {
+                                        topBar: {
+                                            visible: false
+                                        }
+                                    },
+                                    children: [
+                                        {
+                                            component: {
+                                                name: titles.profile.my,
+                                                options: {
+                                                    bottomTab: {
+                                                        text: 'Profile',
+                                                        icon: myProfileIcon
+                                                    },
+                                                }
+                                            }
+                                        }
+                                    ],
 
-                            // options: {
-                            //     topBar: {
-                            //         visible: false
-                            //     }
-                            // }
+                                    // options: {
+                                    //     topBar: {
+                                    //         visible: false
+                                    //     }
+                                    // }
 
-                        },
-                    },
-                ]
-            }
+                                },
+                            },
+                        ]
+                    }
+                }
+            });
+
+
         }
-    });
+        );
+
+
 };
 
 export const setSecurityView = async () => {

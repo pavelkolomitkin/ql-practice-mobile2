@@ -23,5 +23,6 @@ export default {
     chats: {
         private: 'app.chats.private',
         public: 'app.chats.public',
+        publicChat: 'app.chats.publicChat'
     }
 };

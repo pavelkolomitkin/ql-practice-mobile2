@@ -5,11 +5,12 @@ import CommonLayout from '../common/layout';
 import { MenuProvider } from 'react-native-popup-menu';
 
 
-const Layout = ({ children, scrollEmbed }) => {
+const Layout = ({ children, appBar }) => {
 
  return (
      <MenuProvider>
          <CommonLayout>
+             { appBar }
              <View style={styles.container}>
                  { children }
              </View>
@@ -20,7 +21,6 @@ const Layout = ({ children, scrollEmbed }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 8,
         flex: 1,
         // flexDirection: 'column'
     }
