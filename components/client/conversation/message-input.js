@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { Text, View, StyleSheet, TextInput, ScrollView, Keyboard} from 'react-native';
-import { IconButton, Portal } from 'react-native-paper';
+import {IconButton, Portal, withTheme} from 'react-native-paper';
 import EmojiSelector, { Categories } from 'react-native-emoji-selector';
+import {bindActionCreators} from 'redux';
+import * as securityActions from '../../../redux/actions/security/security';
+import * as conversationActions from '../../../redux/actions/client/public-conversation';
+import * as messageActions from '../../../redux/actions/client/public-conversation-message';
+import {connect} from 'react-redux';
+import {TextMessage} from '../../../services/model/message/text-message';
 
 class MessageInput extends Component {
 
@@ -10,8 +16,6 @@ class MessageInput extends Component {
       text: '',
       isSmileSelectorVisible: false
   };
-
-
 
   onSmileButtonPressHandler = () => {
 
@@ -43,8 +47,25 @@ class MessageInput extends Component {
       });
   };
 
-  onSendButtonPressHandler = () => {
+  onSendButtonPressHandler = async () => {
 
+      let { text } = this.state;
+      const { conversation, user } = this.props;
+
+      text = text.trim();
+      if (text !== '')
+      {
+          const message = new TextMessage();
+          message.text = text;
+          message.conversation = conversation;
+          message.user = user;
+
+          await this.props.messageActions.create(message);
+
+          this.setState({
+              text: ''
+          });
+      }
   };
 
   onSmileSelectHandler = (emoji) => {
@@ -158,4 +179,18 @@ MessageInput.propTypes = {
 
 };
 
-export default MessageInput;
+const mapStateToProps = (state) => {
+    return {
+        user: state.security.user
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        securityActions: bindActionCreators(securityActions, dispatch),
+        conversationActions: bindActionCreators(conversationActions, dispatch),
+        messageActions: bindActionCreators(messageActions, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(MessageInput));

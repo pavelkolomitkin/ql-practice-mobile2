@@ -12,6 +12,7 @@ import {Navigation} from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Layout from '../../../components/client/layout';
 import MessageInput from '../../../components/client/conversation/message-input';
+import MessageList from '../../../components/client/public-conversations/message-list';
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
@@ -97,11 +98,11 @@ class Conversation extends NavigationComponent {
         <Layout appBar={this.getHeader()}>
 
           <View style={styles.messageListContainer}>
-
+              <MessageList />
           </View>
 
 
-          <MessageInput />
+          <MessageInput conversation={conversation} />
 
 
         </Layout>
@@ -112,7 +113,7 @@ class Conversation extends NavigationComponent {
 const styles = StyleSheet.create({
   messageListContainer: {
     flex: 2,
-    backgroundColor: '#00cc31'
+    padding: 4
   },
 });
 

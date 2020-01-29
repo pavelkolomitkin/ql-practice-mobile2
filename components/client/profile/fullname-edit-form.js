@@ -66,7 +66,6 @@ class FullNameEditForm extends Component {
 
         try
         {
-            debugger
             await this.props.profileActions.edit(user);
             await this.props.securityActions.updateUser(user);
             if (onClose)
