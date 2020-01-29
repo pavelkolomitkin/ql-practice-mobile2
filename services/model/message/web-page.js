@@ -74,7 +74,7 @@ export default class WebPage
 
     getBaseUrl()
     {
-        const baseUrlRegEx = new RegExp("(http|https)\:\/\/[^\/]*\/",'i');
+        const baseUrlRegEx = new RegExp("(http|https)\:\/\/[^\/]*(\/)?",'i');
         const groups = baseUrlRegEx.exec(this.url);
 
         return groups[0];
@@ -87,7 +87,7 @@ export default class WebPage
         {
             if (result.indexOf('http') === -1)
             {
-                result += this.getBaseUrl() + result;
+                result = this.getBaseUrl() + result;
             }
         }
 

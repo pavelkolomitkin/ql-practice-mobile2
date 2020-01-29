@@ -25,7 +25,7 @@ class MessageLink extends Component {
 
     if (status === MessageLink.STATUS_ERROR)
     {
-      return (<Avatar icon="alert" />);
+      return (<Avatar.Icon icon="alert" />);
     }
 
     return this.getPreparedContent();

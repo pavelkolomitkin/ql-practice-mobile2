@@ -23,7 +23,6 @@ class RegularLink extends MessageLink {
       return;
     }
 
-
     const pageMeta = page.getMeta();
 
     //debugger

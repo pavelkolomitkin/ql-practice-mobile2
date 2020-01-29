@@ -54,7 +54,7 @@ class YoutubeVideoLink extends MessageLink {
             justifyContent: 'center'
           }}
       >
-
+        <Avatar.Icon icon="youtube" />
       </ImageBackground>
     );
 
