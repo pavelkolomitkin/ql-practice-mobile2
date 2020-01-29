@@ -16,7 +16,11 @@ class PictureLink extends MessageLink {
 
     return <Image
       source={{
-        uri: link.url
+        uri: link
+      }}
+      style={{
+        width: 200,
+        height: 200
       }}
     />
   }

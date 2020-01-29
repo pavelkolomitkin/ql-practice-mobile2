@@ -1,60 +1,96 @@
 export default class WebPage
 {
-    static PROPERTY_META_TITLE = 'og:title';
+    static PROPERTY_META_TITLE = 'title';
 
-    static PROPERTY_META_DESCRIPTION = 'og:description';
+    static PROPERTY_META_DESCRIPTION = 'description';
 
-    static PROPERTY_META_IMAGE = 'og:image';
+    static PROPERTY_META_IMAGE = 'image';
 
     meta: any = null;
 
     content: string;
 
-    constructor(content) {
+    url: string;
+
+    constructor(content, url) {
         this.content = content;
+        this.url = url;
     }
 
     getMeta()
     {
-        if (this.meta !== null)
+        if (this.meta === null)
         {
-            this.meta = {};
-
-            [
-                WebPage.PROPERTY_META_TITLE,
-                WebPage.PROPERTY_META_DESCRIPTION,
-                WebPage.PROPERTY_META_IMAGE
-            ].forEach(property => {
-                this.meta[property] = this.getMetaProperty(property);
-            });
+            this.meta = {
+                [WebPage.PROPERTY_META_TITLE]: this.getMetaTitle(),
+                [WebPage.PROPERTY_META_DESCRIPTION]: this.getCommonMeta(WebPage.PROPERTY_META_DESCRIPTION),
+                [WebPage.PROPERTY_META_IMAGE]: this.getMetaImage()
+            };
         }
 
         return this.meta;
     }
 
-    getMetaProperty(propertyName)
+    getCommonMeta(propertyName)
     {
-        const tagRegex = new RegExp('<meta(\s)*property="og\:"' + propertyName + '"[^>]*>', 'img');
-
-        const tag = tagRegex.exec(this.content);
-        if (!!tag && tag[0])
+        //debugger
+        let matches = this.content.match(new RegExp('<meta(\\s)+property="(og\\:)?' + propertyName + '"[^>]*', 'ig'));
+        if (!matches)
         {
-            return this.getTagContent(tag[0]);
+            matches = this.content.match(new RegExp('<meta(\\s)+name="(og\\:)?' + propertyName + '"[^>]*', 'ig'));
+        }
+
+        if (!!matches)
+        {
+            //debugger
+            //let content = matches[0].match(/content="([^"]*)"/ig);
+            let content = /content="([^"]*)"/i.exec(matches[0]);
+            if (!!content && (content[1]))
+            {
+                return content[1];
+            }
         }
 
         return null;
     }
 
-    getTagContent(tag)
+    getMetaTitle()
     {
-        const regExp = new RegExp('content="([^"]*)"', 'im');
-        const result = regExp.exec(tag);
-
-        if (!!result && result[1])
+        //debugger
+        let result = this.getCommonMeta('title');
+        if (!!result)
         {
-            return result[1];
+            return result;
+        }
+
+        const matches = /<title>([^<]*)<\/title>/ig.exec(this.content);
+        if (!!matches && !!matches[1])
+        {
+            return matches[1];
         }
 
         return null;
+    }
+
+    getBaseUrl()
+    {
+        const baseUrlRegEx = new RegExp("(http|https)\:\/\/[^\/]*\/",'i');
+        const groups = baseUrlRegEx.exec(this.url);
+
+        return groups[0];
+    }
+
+    getMetaImage()
+    {
+        let result = this.getCommonMeta(WebPage.PROPERTY_META_IMAGE);
+        if (!!result)
+        {
+            if (result.indexOf('http') === -1)
+            {
+                result += this.getBaseUrl() + result;
+            }
+        }
+
+        return result;
     }
 }

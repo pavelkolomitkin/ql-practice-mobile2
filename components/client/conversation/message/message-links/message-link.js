@@ -39,7 +39,7 @@ class MessageLink extends Component {
   onPressHandler = async () => {
     const { link } = this.props;
 
-    await Linking.openUrl(link);
+    await Linking.openURL(link);
   };
 
   render() {

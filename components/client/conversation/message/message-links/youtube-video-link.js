@@ -46,15 +46,14 @@ class YoutubeVideoLink extends MessageLink {
           }}
           resizeMode='contain'
           style={{
-            width: '100%',
-            height: '100%',
+            width: 200,
+            height: 200,
             backgroundColor: 'black',
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center'
           }}
       >
-        <Avatar icon="youtube" />
 
       </ImageBackground>
     );

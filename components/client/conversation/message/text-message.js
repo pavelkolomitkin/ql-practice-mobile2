@@ -58,16 +58,15 @@ class TextMessage extends Message {
 
                     if (item.type === LinkInfo.YOUTUBE_TYPE)
                     {
-                        return (<YoutubeVideoLink link={item.url} />);
+                        return (<YoutubeVideoLink key={item.url} link={item.url} />);
                     }
 
                     if (item.type === LinkInfo.PICTURE_TYPE)
                     {
-                        return (<PictureLink link={item.url}/>);
+                        return (<PictureLink key={item.url} link={item.url}/>);
                     }
 
-                    return (<RegularLink link={item.url} />);
-
+                    return (<RegularLink key={item.url} link={item.url} />);
                 })
             }
         </>);

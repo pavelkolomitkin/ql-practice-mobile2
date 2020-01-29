@@ -7,16 +7,16 @@ export default class WebPageService {
     {
         try
         {
-            const response = await axios.get(url);
-            const contentType = response.headers['Content-Type'];
+            const response = await axios.get(url, { maxRedirects: 2 });
+            const contentType = response.headers['content-type'];
 
             if (contentType && (contentType.indexOf('text/html') === 0))
             {
-                return new WebPage(response.data);
+                return new WebPage(response.data, url);
             }
         }
         catch (error) {
-
+            //debugger
         }
 
         return null;

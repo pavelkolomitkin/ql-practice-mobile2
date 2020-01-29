@@ -24,18 +24,16 @@ class RegularLink extends MessageLink {
     }
 
 
-    const pageMeta = await page.getMeta();
+    const pageMeta = page.getMeta();
 
-    let title = meta[WebPage.PROPERTY_META_TITLE];
-    const description = meta[WebPage.PROPERTY_META_DESCRIPTION];
-    const image = meta[WebPage.PROPERTY_META_IMAGE];
+    //debugger
+    let title = pageMeta[WebPage.PROPERTY_META_TITLE];
+    const description = pageMeta[WebPage.PROPERTY_META_DESCRIPTION];
+    const image = pageMeta[WebPage.PROPERTY_META_IMAGE];
 
     if (!title)
     {
-      const baseUrlRegEx = new RegExp("(http|https)\:\/\/[^\/]*\/",'i');
-      const groups = baseUrlRegEx.exec(link);
-
-      title = groups[0];
+      title = page.getBaseUrl();
     }
 
     this.setState({
@@ -48,10 +46,15 @@ class RegularLink extends MessageLink {
     });
   }
 
-
   getPreparedContent() {
 
     const { title, description, image } = this.state;
+
+    debugger
+    if (!title)
+    {
+      return null
+    }
 
     return (
         <View style={{
@@ -67,6 +70,10 @@ class RegularLink extends MessageLink {
                 <Image
                   source={ {
                     uri: image
+                  }}
+                  style={{
+                    width: 200,
+                    height: 200
                   }}
                 />
           }

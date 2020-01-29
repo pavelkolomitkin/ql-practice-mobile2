@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {LinkInfo} from './link-info';
+import * as _ from 'lodash';
 
 export default class MessageParser
 {
@@ -21,7 +22,7 @@ export default class MessageParser
             }
         }
 
-        return result;
+        return _.uniqBy(result, 'url');
     }
 
     async identifyParsedLink(link)
@@ -50,7 +51,7 @@ export default class MessageParser
         try
         {
             const response = await axios.head(link);
-            const contentType = response.headers['Content-Type'];
+            const contentType = response.headers['content-type'];
 
             if (contentType && (contentType.indexOf('image/') === 0))
             {
@@ -58,7 +59,7 @@ export default class MessageParser
             }
         }
         catch (error) {
-
+            //debugger
         }
 
         return result;
